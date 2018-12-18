@@ -10,7 +10,7 @@
       <span class="tab-link border-1px">推荐</span>
     </router-link>
     <router-link tag="div" class="tab-item" to="/rank">
-      <span class="tab-link border-1px">排行
+      <span class="tab-link border-1px">发现
       </span>
     </router-link>
     <div class="tab-item">

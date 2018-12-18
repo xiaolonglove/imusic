@@ -1,7 +1,7 @@
 <template>
   <i-scroll ref="scroll" class="recommend" :data="discList">
     <div>
-      <div v-if="recommends.length" class="slider-wrapper" ref="sliderWrapper">
+      <div class="slider-wrapper" v-if="recommends.length" ref="sliderWrapper">
         <i-slider>
           <div v-for="(item,i) in recommends" :key="i">
             <a href="javascript:void(0)">
@@ -10,22 +10,40 @@
           </div>
         </i-slider>
       </div>
-      <div class="recommend-list">
-        <h1 class="list-title">热门歌单推荐</h1>
-        <ul>
+      <div class="tab-wrapper">
+        <div class="tab-item">
+          <i class="icon-playlist"></i>
+          <span>歌单</span>
+        </div>
+        <div class="tab-item" @click="clickSinger">
+          <i class="icon-mine"></i>
+          <span>歌手</span>
+        </div>
+        <div class="tab-item">
+          <i class="icon-playlist"></i>
+          <span>电台</span>
+        </div>
+        <div class="tab-item">
+          <i class="icon-playlist"></i>
+          <span>排行</span>
+        </div>
+      </div>
+      <i-split />
+      <div class="musicRecommend-wrapper">
+        <h1 class="title">热门歌单推荐<i class="icon-arrow-right"></i></h1>
+        <ul class="list-content">
           <li @click="selectItem(item)" v-for="(item,i) in discList" class="item" :key="i">
             <div class="icon">
-              <img width="60" height="60" v-lazy="item.imgurl">
-            </div>
-            <div class="text">
+              <img v-lazy="item.imgurl">
               <h2 class="name" v-html="item.creator.name"></h2>
-              <p class="desc" v-html="item.dissname"></p>
+              <span class="listennum">{{itemlistennum(item.listennum)}}</span>
             </div>
+            <p class="desc" v-html="item.dissname"></p>
           </li>
         </ul>
       </div>
     </div>
-    <i-loading v-show="!discList.length"></i-loading>
+    <i-loading v-show="isLoading"></i-loading>
   </i-scroll>
 </template>
 
@@ -35,15 +53,18 @@
   import iScroll from '@/base/scroll/scroll'
   import iSlider from '@/base/slider/slider'
   import iLoading from '@/base/loading/loading'
+  import iSplit from '@/base/split/split'
   
   export default {
     data() {
       return {
         recommends: [],
-        discList: []
+        discList: [],
+        isLoading: true
       }
     },
     created() {
+      this.isLoading = true
       this._getRecommend()
       this._getDiscList()
     },
@@ -60,10 +81,18 @@
         }
       },
       selectItem(item) {
-        this.$router.push({
-          path: `/recommend/${item.dissid}`
-        })
-        this.setDisc(item)
+        // this.$router.push({
+        //   path: `/recommend/${item.dissid}`
+        // })
+        // this.setDisc(item)
+      },
+      itemlistennum(num) {
+        num += ""
+        const len = num.length
+        return (len > 4)? num.slice(0, len-4) + "万": num
+      },
+      clickSinger() {
+        console.log('点击歌手');
       },
       _getRecommend() {
         getRecommend().then((res) => {
@@ -75,7 +104,8 @@
       _getDiscList() {
         getDiscList().then((res) => {
           if (res.code === ERR_OK) {
-            this.discList = res.data.list
+            this.isLoading = false;
+            this.discList = res.data.list.slice(0,6)
           }
         })
       }
@@ -83,6 +113,7 @@
     components: {
       iScroll,
       iSlider,
+      iSplit,
       iLoading,
     }
   }
@@ -90,6 +121,11 @@
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/variable"
+  .title
+    position: relative
+    height: 50px
+    line-height: 50px
+    padding: 0 5px
   .recommend
     height: 100%
     overflow: hidden
@@ -97,33 +133,72 @@
       position: relative
       width: 100%
       overflow: hidden
-    .recommend-list
-      .list-title
-        height: 65px
-        line-height: 65px
-        text-align: center
-        font-size: $font-size-medium
+    .tab-wrapper
+      display: flex
+      width: 100%
+      height: 80px
+      .tab-item
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        line-height: 30px;
+        padding-top: 15px
+        i
+          font-size: $font-size-large-x
+        span
+          font-size: $font-size-medium
+    .musicRecommend-wrapper
+      .title
+        text-align: left
+        font-size: $font-size-medium-x
         color: $color-text-l
-      .item
-        display: flex
-        box-sizing: border-box
-        align-items: center
-        padding: 0 20px 20px 20px
-        .icon
-          flex: 0 0 60px
-          width: 60px
-          padding-right: 20px
-        .text
+        font-weight: 600
+        i
+          width: 30px
+          height: 30px
+          line-height: 30px
+          text-align: center
+          position: absolute
+          top: 50%
+          right: 0
+          transform: translateY(-15px)
+      .list-content
+        display: inline-block
+        li.item
           display: flex
           flex-direction: column
-          justify-content: center
-          flex: 1
-          line-height: 20px
-          overflow: hidden
-          font-size: $font-size-medium
-          .name
-            margin-bottom: 10px
-            color: $color-text
+          box-sizing: border-box
+          width: 33.33%
+          float: left
+          padding: 0 5px
+          margin-bottom: 5px
+          .icon
+            width: 100%
+            position: relative
+            img
+              width: 100%
+              border-radius: 5px
+            .name
+              position: absolute
+              bottom: 1px
+              left: 1px
+              width: 100%
+              height: 14px
+              line-height: 14px
+              overflow: hidden
+              background: rgba(0,0,0,.5)
+              color: #fff
+            .listennum
+              color: #fff
+              font-size: $font-size-small-s
+              display: inline-block
+              position: absolute
+              top: 1px
+              right: 1px
           .desc
-            color: $color-text-d
+            line-height: 15px
+            overflow: hidden
+            font-size: $font-size-small
+            color: $color-text-l
 </style>

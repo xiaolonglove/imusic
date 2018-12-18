@@ -1,5 +1,5 @@
 <template>
-  <div class="loading-container">
+  <div class="loading-wrapper">
     <div class="loading">
       <span></span>
       <span></span>
@@ -14,7 +14,7 @@
   }
 </script>
 <style scoped>
-  .loading-container{
+  .loading-wrapper{
     position: absolute;
     width: 100%;
     top: 50%;
