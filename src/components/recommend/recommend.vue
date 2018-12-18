@@ -43,6 +43,7 @@
         </ul>
       </div>
     </div>
+    <i-singer ref="singerRef"></i-singer>
     <i-loading v-show="isLoading"></i-loading>
   </i-scroll>
 </template>
@@ -51,9 +52,10 @@
   import {ERR_OK} from '@/api/config'
   import {getRecommend, getDiscList} from '@/api/recommend'
   import iScroll from '@/base/scroll/scroll'
-  import iSlider from '@/base/slider/slider'
   import iLoading from '@/base/loading/loading'
   import iSplit from '@/base/split/split'
+  import iSlider from '@/base/slider/slider'
+  import iSinger from '@/components/singer/singer'
   
   export default {
     data() {
@@ -92,7 +94,7 @@
         return (len > 4)? num.slice(0, len-4) + "万": num
       },
       clickSinger() {
-        console.log('点击歌手');
+        this.$refs.singerRef.show();
       },
       _getRecommend() {
         getRecommend().then((res) => {
@@ -112,9 +114,10 @@
     },
     components: {
       iScroll,
-      iSlider,
       iSplit,
       iLoading,
+      iSlider,
+      iSinger,
     }
   }
 </script>
