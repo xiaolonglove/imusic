@@ -15,10 +15,10 @@
           <i class="icon-playlist"></i>
           <span>歌单</span>
         </div>
-        <div class="tab-item" @click="clickSinger">
+        <router-link tag="div" class="tab-item" to="/singer">
           <i class="icon-mine"></i>
           <span>歌手</span>
-        </div>
+        </router-link>
         <div class="tab-item">
           <i class="icon-playlist"></i>
           <span>电台</span>
@@ -43,8 +43,8 @@
         </ul>
       </div>
     </div>
-    <i-singer ref="singerRef"></i-singer>
     <i-loading v-show="isLoading"></i-loading>
+    <router-view></router-view>
   </i-scroll>
 </template>
 
@@ -55,7 +55,6 @@
   import iLoading from '@/base/loading/loading'
   import iSplit from '@/base/split/split'
   import iSlider from '@/base/slider/slider'
-  import iSinger from '@/components/singer/singer'
   
   export default {
     data() {
@@ -69,6 +68,10 @@
       this.isLoading = true
       this._getRecommend()
       this._getDiscList()
+    },
+    watch: {
+      '$route' (to, from) {
+      }
     },
     methods: {
       handlePlaylist(playlist) {
@@ -94,6 +97,9 @@
         return (len > 4)? num.slice(0, len-4) + "万": num
       },
       clickSinger() {
+        // this.$router.push({
+        //   path: `/singer`
+        // })
         this.$refs.singerRef.show();
       },
       _getRecommend() {
@@ -117,7 +123,6 @@
       iSplit,
       iLoading,
       iSlider,
-      iSinger,
     }
   }
 </script>
@@ -168,14 +173,14 @@
           transform: translateY(-15px)
       .list-content
         display: inline-block
+        padding: 0 3px
         li.item
           display: flex
           flex-direction: column
           box-sizing: border-box
           width: 33.33%
           float: left
-          padding: 0 5px
-          margin-bottom: 5px
+          padding: 6px
           .icon
             width: 100%
             position: relative
@@ -184,11 +189,13 @@
               border-radius: 5px
             .name
               position: absolute
-              bottom: 1px
-              left: 1px
-              width: 100%
+              bottom: 2px
+              left: 2px
+              width: calc(100% - 2px)
               height: 14px
               line-height: 14px
+              border-bottom-right-radius: 6px
+              border-bottom-left-radius: 6px
               overflow: hidden
               background: rgba(0,0,0,.5)
               color: #fff
@@ -197,11 +204,13 @@
               font-size: $font-size-small-s
               display: inline-block
               position: absolute
-              top: 1px
-              right: 1px
+              top: 2px
+              right: 2px
           .desc
+            height: 30px;
             line-height: 15px
+            padding-top: 3px
             overflow: hidden
             font-size: $font-size-small
-            color: $color-text-l
+            color: $color
 </style>

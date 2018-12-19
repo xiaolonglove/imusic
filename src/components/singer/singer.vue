@@ -1,22 +1,21 @@
 <template>
-  <transition name="food-move">
+  <transition name="slide">
     <div class="singer" v-show="showFlag" ref="singer">
       <div class="back-wrapper" @click="hide">
-        <i-back></i-back>
+        <i-back :title="'歌手'"></i-back>
       </div>
       <div class="list-wrapper">
-        歌手
-        <!-- <list-view  ref="list" :data="singers" @select="selectSinger"></list-view> -->
+        <singer-list ref="list" :data="singers"></singer-list>
       </div>
     </div>
   </transition>
 </template>
 
 <script type="text/ecmascript-6">
-  // import ListView from '@/base/listview/listview'
   import {getSingerList} from '@/api/singer'
   import {ERR_OK} from '@/api/config'
   import iBack from '@/base/back/back'
+  import SingerList from '@/components/singerList/singerList'  
 
   const HOT_SINGER_LEN = 10
   const HOT_NAME = '热门'
@@ -26,7 +25,7 @@
     data() {
       return {
         singers: [],
-        showFlag: false
+        showFlag: true
       }
     },
     created() {
@@ -38,6 +37,11 @@
       },
       hide() {
         this.showFlag = false
+        setTimeout(() => {
+          this.$router.push({
+            path: '/recommend'
+          })
+        }, 300);
       },
       _getSingerList() {
         getSingerList().then((res) => {
@@ -93,24 +97,25 @@
     },
     components: {
       iBack,
-      // ListView
+      SingerList
     }
   }
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/variable.styl"
+  .slide-enter-active, .slide-leave-active
+    transition: all 0.3s
+  .slide-enter, .slide-leave-to
+    transform: translate3d(100%, 0, 0)
   .singer
     position: fixed
     top: 0
     bottom: 0
     width: 100%
+    z-index: 10;
     transition: all 0.2s linear
     -webkit-transition: all 0.2s linear
-    &.food-move-enter
-      transform: translate3d(100%, 0, 0)
-    &.food-move-leave, .food-move-leave-to
-      transform: translate3d(100%, 0, 0)
     .back-wrapper
       position: fixed
       top: 0
