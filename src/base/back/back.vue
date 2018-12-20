@@ -23,17 +23,18 @@
     top: 0
     left: 0
     width: 100%
-    text-align: left
+    text-align: center
     background: $color-background
     .icon-arrow-right
-      display: block
-      padding: 8px 10px
+      display: inline-block
+      float: left
+      padding: 8px 6px
       font-size: 20px
+      width: 20px
       color: $color
     .title
       font-size: 15px
-      position: absolute
-      top: 11px
-      left: 40px
       font-weight: 600
+      padding: 8px
+      display: inline-block
 </style>

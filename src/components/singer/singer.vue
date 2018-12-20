@@ -13,10 +13,10 @@
 
 <script type="text/ecmascript-6">
   import {getSingerList} from '@/api/singer'
-  import {ERR_OK} from '@/api/config'
   import iBack from '@/base/back/back'
   import SingerList from '@/components/singerList/singerList'  
 
+  const ERR_OK = 0
   const HOT_SINGER_LEN = 10
   const HOT_NAME = '热门'
 
