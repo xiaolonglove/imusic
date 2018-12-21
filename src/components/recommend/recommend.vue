@@ -11,74 +11,83 @@
         </i-slider>
       </div>
       <div class="tab-wrapper">
-        <div class="tab-item">
+        <router-link tag="div" class="tab-item" to="/musiclist">
           <i class="icon-playlist"></i>
           <span>歌单</span>
-        </div>
+        </router-link>
         <router-link tag="div" class="tab-item" to="/singer">
-          <i class="icon-mine"></i>
+          <i class="icon-user"></i>
           <span>歌手</span>
         </router-link>
-        <div class="tab-item">
-          <i class="icon-playlist"></i>
+        <router-link tag="div" class="tab-item" to="/radio">
+          <i class="icon-wallet"></i>
           <span>电台</span>
-        </div>
-        <div class="tab-item">
-          <i class="icon-playlist"></i>
+        </router-link>
+        <router-link tag="div" class="tab-item" to="/top">
+          <i class="icon-chart-bar"></i>
           <span>排行</span>
-        </div>
+        </router-link>
       </div>
       <i-split />
       <div class="wrapper musiclistRecommend">
-        <h1 class="title">热门歌单推荐<i class="icon-arrow-right"></i></h1>
+        <h1 class="title">热门歌单推荐<i class="icon-cheveron-right"></i></h1>
         <ul class="list-content">
           <li @click="selectMusiclist(item)" v-for="(item,i) in discList" class="item" :key="i">
             <div class="icon">
               <img v-lazy="item.imgurl">
-              <!-- <h2 class="name" v-html="item.creator.name"></h2> -->
-              <span class="listennum">{{itemlistennum(item.listennum)}}</span>
+              <div class="detail">
+                <!-- <h2 class="name" v-html="item.creator.name"></h2> -->
+                <i class="icon-headphones"></i>
+                <span class="listennum">{{itemlistennum(item.listennum)}}</span>
+              </div>
             </div>
             <p class="desc" v-html="item.dissname"></p>
           </li>
         </ul>
       </div>
       <i-split />
-      <div class="wrapper broadcasting">
-        <h1 class="title">精选电台<i class="icon-arrow-right"></i></h1>
-          <div class="container" ref="broadContainer">
-            <ul class="list-content" ref="broadUl">
-              <li ref="broadItem" class="item" @click="selectBroadcasting(item)" v-for="(item,i) in broadcastingList" :key="i">
-                <div class="icon">
-                  <img v-lazy="item.radioImg">
-                  <span class="listennum">{{itemlistennum(item.listenNum)}}</span>
-                  <p class="desc" v-html="item.radioName"></p>
-                </div>
-              </li>
-            </ul>
-          </div>
+      <div class="wrapper radio">
+        <h1 class="title">
+          精选电台
+          <router-link tag="i" class="icon-cheveron-right" to="/radio"></router-link>
+        </h1>
+        <div class="container" ref="broadContainer">
+          <ul class="list-content" ref="broadUl">
+            <li ref="broadItem" class="item" @click="selectBroadcasting(item)" v-for="(item,i) in hotRadioList" :key="i">
+              <div class="icon">
+                <img v-lazy="item.radioImg">
+                <span class="listennum">{{itemlistennum(item.listenNum)}}</span>
+                <p class="desc" v-html="item.radioName"></p>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
       <i-split />
       <div class="wrapper newsong">
-        <h1 class="title">新歌首发<i class="icon-arrow-right"></i></h1>
+        <h1 class="title">
+          新歌首发
+          <router-link tag="i" class="icon-cheveron-right" to="/newsong"></router-link>
+        </h1>
         <ul class="list-content" ref="newsongUl">
-          <li ref="newsongItem" class="item"  v-for="(item,i) in newsongList" :key="i">
+          <li ref="newsongItem" class="item"  v-for="(item,i) in newsongList.slice(0,6)" :key="i">
             <div class="icon">
               <img v-lazy="newsongItemImg(item.album.mid)">
               <p class="name" v-html="item.name"></p>
-              <p class="desc" v-html="'你还'"></p>
+              <p class="desc" v-html="newsongSinger(item.singer)"></p>
             </div>
           </li>
         </ul>
       </div>
     </div>
     <i-loading v-show="isLoading"></i-loading>
-    <router-view></router-view>
+    <router-view :newsongList="newsongList" :newsongTabs="newsongTabs"></router-view>
   </i-scroll>
 </template>
 
 <script type="text/ecmascript-6">
   import BScroll from 'better-scroll';
-  import {getRecommends, getSliders, getDiscList, getBroadcasting} from '@/api/recommend'
+  import {getRecommends, getSliders, getDiscList, getRadioList, getNewSongList} from '@/api/recommend'
   import iScroll from '@/base/scroll/scroll'
   import iLoading from '@/base/loading/loading'
   import iSplit from '@/base/split/split'
@@ -90,7 +99,8 @@
       return {
         sliders: [], //
         discList: [],
-        broadcastingList: [],
+        radioList: [],
+        hotRadioList: [],
         newsongList: [],
         newsongTabs: [],
         isLoading: true,
@@ -100,7 +110,7 @@
       this.isLoading = true
       this._getSliders()
       this._getDiscList()
-      this._getBroadcasting()
+      this._getRadioList()
       this._getRecommends()
     },
     updated() {
@@ -151,6 +161,16 @@
         const url = 'https://y.gtimg.cn/music/photo_new/T002R90x90M000'+ mid +'.jpg?max_age=2592000'
         return url
       },
+      newsongSinger(singerList) {
+        let ret = []
+        if (!singerList) {
+          return ''
+        }
+        singerList.forEach((s) => {
+          ret.push(s.name)
+        })
+        return ret.join('/')
+      },
       _getSliders() {
         getSliders().then((res) => {
           if (res.code === ERR_OK) {
@@ -162,22 +182,25 @@
         getDiscList().then((res) => {
           if (res.code === ERR_OK) {
             this.isLoading = false;
+            // console.log(res.data);
             this.discList = res.data.list.slice(0,6)
           }
         })
       },
-      _getBroadcasting() {
-        getBroadcasting().then((res) => {
+      _getRadioList() {
+        getRadioList().then((res) => {
           if (res.code === ERR_OK) {
-            const data = res.data.data.groupList[0].radioList
-            this.broadcastingList = res.data.data.groupList[0].radioList;
+            const data = res.data.data.groupList;
+            // console.log(data);
+            this.radioList = data;
+            this.hotRadioList = data[0].radioList;
           }
         })
       },
       _getRecommends() {
         getRecommends('new_song').then((res) => {
           if (res.code === ERR_OK) {
-            this.newsongList = res.data.song_list.slice(0,6)
+            this.newsongList = res.data.song_list
             this.newsongTabs = res.data.type_info
           }
         })
@@ -224,17 +247,17 @@
       color: $color-text-l
       font-weight: 600
       i
-        width: 30px
-        height: 30px
-        line-height: 30px
-        text-align: center
-        position: absolute
-        top: 50%
-        right: 0
-        transform: translateY(-15px)
+        float: right
+        width: 50px
+        height: 50px
+        line-height: 50px
+        padding-right: 3px
+        text-align: right
+        font-size: $font-size-g
     .list-content
         display: inline-block
         padding: 0 3px
+        margin-bottom: 6px
   // detail
   .recommend
     height: 100%
@@ -284,13 +307,13 @@
             overflow: hidden
             background: rgba(0,0,0,.5)
             color: #fff
-          .listennum
+          .detail
             color: #fff
             font-size: $font-size-small-s
             display: inline-block
             position: absolute
-            top: 2px
-            right: 2px
+            bottom: 3px
+            left: 3px
         .desc
           height: 30px;
           line-height: 15px
@@ -298,7 +321,7 @@
           overflow: hidden
           font-size: $font-size-small
           color: $color
-    .broadcasting
+    .radio
       .container
         width 100%
         overflow: hidden;
@@ -309,8 +332,8 @@
             box-sizing: border-box
             flex-shrink: 0;
             padding: 6px;
-            width: 112px;
-            height 112px
+            width: 86px;
+            height 86px
             display: inline-block;
             position: relative
             .icon
@@ -320,7 +343,8 @@
                 border-radius: 50%
               .desc
                 text-align: center
-                margin-top: 5px
+                padding: 5px 0
+                overflow: hidden
               .listennum
                 position: absolute
                 bottom: 15px
@@ -354,16 +378,19 @@
           img
             width: 100%
             border-radius: 5px
+          p
+            text-overflow: ellipsis
+            white-space: nowrap
+            overflow: hidden
           .name
-            position: absolute
-            bottom: 2px
-            left: 2px
             width: calc(100% - 2px)
             height: 14px
             line-height: 14px
+            margin-top: 5px
             border-bottom-right-radius: 6px
             border-bottom-left-radius: 6px
-            overflow: hidden
-            background: rgba(0,0,0,.5)
-            color: #fff
+            color: $color
+          .desc
+            padding: 3px 0
+            color: $color-text-weak 
 </style>

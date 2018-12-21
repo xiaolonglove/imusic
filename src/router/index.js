@@ -6,6 +6,10 @@ import Rank from '@/components/rank/rank'
 import User from '@/components/user/user'
 import Search from '@/components/search/search'
 import Singer from '@/components/singer/singer'
+import Musiclist from '@/components/musiclist/musiclist'
+import Radio from '@/components/radio/radio'
+import Top from '@/components/top/top'
+import NewSong from '@/components/newSong/newSong'
 
 Vue.use(Router)
 
@@ -27,7 +31,23 @@ export default new Router({
         {
           path: '/singer',
           component: Singer
-        }
+        },
+        {
+          path: '/musiclist',
+          component: Musiclist
+        },
+        {
+          path: '/radio',
+          component: Radio
+        },
+        {
+          path: '/top',
+          component: Top
+        },
+        {
+          path: '/newsong',
+          component: NewSong
+        },
       ]
     },
     {

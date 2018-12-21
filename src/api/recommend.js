@@ -6,10 +6,17 @@ const ERR_RES = {
   data: []
 }
 
+/* 
+* {
+    category: '种类',
+    focus：焦点图
+    new_album：新专辑
+    new_song: '新歌'
+  }
+*/
 export function getRecommends(type) {
   const options = {
     url: 'https://u.y.qq.com/cgi-bin/musicu.fcg',
-    name: 'music',
     param: 'callback',
     params: {
       g_tk: 1928093487,
@@ -26,14 +33,48 @@ export function getRecommends(type) {
   }
   return new Promise((res, rej) => {
     jsonp(options).then((data) => {
-      if(!type || type == 'all' ) {
-        res(data)
-      }else {
+      if(!!type && type !== 'all' ) {
         res(data[type] || ERR_RES)
-      }  
+        return
+      }
+      res({code: 0, data})
     }).catch((err) => {
       rej(err)
     });
+  })
+}
+
+// 新歌类别
+export function getNewSongList(type) {
+  const url = '/api/getNewSongList';
+  const data = {
+    "comm":{"ct":24},
+    "new_song":{
+      "module":"QQMusic.MusichallServer",
+      "method":"GetNewSong",
+      "param":{
+        "type": type || 0
+      }
+    }
+  }
+  const params = {
+    g_tk: 1928093487,
+    inCharset: 'utf-8',
+    outCharset: 'utf-8',
+    notice: 0,
+    format: 'jsonp',
+    loginUin: 0,
+    hostUin: 0,
+    platform: 'yqq',
+    needNewCode: 0,
+    platform: 'yqq.json',
+    data: JSON.stringify(data)
+  }
+
+  return axios.get(url, {
+    params: params
+  }).then((res) => {
+    return Promise.resolve(res.data)
   })
 }
 
@@ -85,7 +126,7 @@ export function getDiscList() {
 }
 
 //电台
-export function getBroadcasting() {
+export function getRadioList() {
 
   const options = {
     url: 'https://c.y.qq.com/v8/fcg-bin/fcg_v8_radiolist.fcg',

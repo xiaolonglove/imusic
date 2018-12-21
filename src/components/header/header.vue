@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <div class="tab-item">
-      <i class="icon-playlist"></i>
+      <i class="icon-menu"></i>
     </div>
     <router-link tag="div" class="tab-item" to="/mymusic">
       <span class="tab-link border-1px">我的</span>
@@ -14,7 +14,7 @@
       </span>
     </router-link>
     <div class="tab-item">
-      <i class="icon-Search"></i>
+      <i class="icon-search"></i>
     </div>
   </div>
 </template>

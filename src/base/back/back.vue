@@ -1,6 +1,6 @@
 <template>
   <div class="back">
-    <i class="icon-arrow-right"></i>
+    <i class="icon-cheveron-left"></i>
     <span class="title">{{title}}</span>
   </div>
 </template>
@@ -25,11 +25,11 @@
     width: 100%
     text-align: center
     background: $color-background
-    .icon-arrow-right
+    .icon-cheveron-left
       display: inline-block
       float: left
-      padding: 8px 6px
-      font-size: 20px
+      padding: 6px
+      font-size: 24px
       width: 20px
       color: $color
     .title
