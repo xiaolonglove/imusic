@@ -151,6 +151,22 @@ export function getRadioList() {
   return jsonp(options)
 }
 
+//排行榜
+export function getTopList() {
+  const options = {
+    url: 'https://c.y.qq.com/v8/fcg-bin/fcg_v8_toplist_opt.fcg',
+    param: 'jsonpCallback',
+    name: 'jsonCallback',
+    params: {
+      page: 'index',
+      format: 'html',
+      tpl: 'macv4',
+      v8debug: 1,
+    }
+  }
+  return jsonp(options)
+}
+
 export function getSongList(disstid) {
   const options = {
     url: 'https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg',

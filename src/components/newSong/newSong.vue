@@ -17,6 +17,8 @@
         </ul>
         <i-scroll
         :data="songList"
+        :listen-scroll="listenScroll"
+        :probe-type="probeType"
         v-show="showFlag"
         class="scrollContainer"
         ref="scrollContainer">
@@ -85,7 +87,6 @@
       selectTab(i) {
         if(this.tabType === i) return false
         this.tabType = i
-        this.$emit('sendRequest', 1)
         this._getNewSongList(i)
       },
       newsongName(name, subtitle) {
@@ -106,13 +107,19 @@
         return url
       },
       _getNewSongList(i) {
+        this.sendRequest(1)
         getNewSongList(i).then((res) => {
-          this.$emit('sendRequest', 0)
-          this.songList = res.new_song.data.song_list || []
+          if (res.code === ERR_OK) {
+            this.sendRequest(0)
+            this.songList = res.new_song.data.song_list || []
+          }
         }).catch((err) => {
-          this.$emit('sendRequest', 0)
+          this.sendRequest(0)
           this.songList = []
         });
+      },
+      sendRequest(state) {
+        this.$emit('sendRequest', state || 0)
       },
     },
     components: {
@@ -144,6 +151,7 @@
       bottom: 0
       width: 100%
       height: 36px
+      line-height: 36px
       z-index: 10
     .list-wrapper
       display: flex

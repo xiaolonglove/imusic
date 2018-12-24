@@ -9,6 +9,14 @@
 
   export default {
     props: {
+      scrollX: {
+        type: Boolean,
+        default: false
+      },
+      scrollY: {
+        type: Boolean,
+        default: true
+      },
       probeType: {
         type: Number,
         default: 1
@@ -49,6 +57,8 @@
           return
         }
         this.scroll = new BScroll(this.$refs.wrapper, {
+          scrollX: this.scrollX,
+          scrollY: this.scrollY,
           probeType: this.probeType,
           click: this.click
         })

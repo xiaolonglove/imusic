@@ -30,8 +30,11 @@
       </div>
       <i-split />
       <div class="wrapper musiclistRecommend">
-        <h1 class="title">热门歌单推荐<i class="icon-cheveron-right"></i></h1>
-        <ul class="list-content">
+        <h1 class="title">
+          热门歌单推荐
+          <router-link tag="i" class="icon-cheveron-right" to="/musiclist"></router-link>
+        </h1>
+        <ul class="list-ul">
           <li @click="selectMusiclist(item)" v-for="(item,i) in discList" class="item" :key="i">
             <div class="icon">
               <img v-lazy="item.imgurl">
@@ -51,9 +54,10 @@
           精选电台
           <router-link tag="i" class="icon-cheveron-right" to="/radio"></router-link>
         </h1>
-        <div class="container" ref="broadContainer">
-          <ul class="list-content" ref="broadUl">
-            <li ref="broadItem" class="item" @click="selectBroadcasting(item)" v-for="(item,i) in hotRadioList" :key="i">
+        <i-scroll ref="broadContainer" class="container" :data="radio.data" :scroll-x="radio.scrollX" :scroll-y="radio.scrollY">
+        <!-- <div class="container" ref="broadContainer"> -->
+          <ul class="list-ul" ref="broadUl">
+            <li ref="broadItem" class="item" @click="selectBroadcasting(item)" v-for="(item,i) in radio.data" :key="i">
               <div class="icon">
                 <img v-lazy="item.radioImg">
                 <span class="listennum">{{itemlistennum(item.listenNum)}}</span>
@@ -61,7 +65,8 @@
               </div>
             </li>
           </ul>
-        </div>
+        <!-- </div> -->
+        </i-scroll>
       </div>
       <i-split />
       <div class="wrapper newsong">
@@ -69,7 +74,7 @@
           新歌首发
           <router-link tag="i" class="icon-cheveron-right" to="/newsong"></router-link>
         </h1>
-        <ul class="list-content" ref="newsongUl">
+        <ul class="list-ul" ref="newsongUl">
           <li ref="newsongItem" class="item"  v-for="(item,i) in newsongList.slice(0,6)" :key="i">
             <div class="icon">
               <img v-lazy="newsongItemImg(item.album.mid)">
@@ -81,7 +86,7 @@
       </div>
     </div>
     <i-loading v-show="isLoading"></i-loading>
-    <router-view :newsongList="newsongList" :newsongTabs="newsongTabs" v-on:sendRequest="sendRequest"></router-view>
+    <router-view @sendRequest="sendRequest" :newsongList="newsongList" :newsongTabs="newsongTabs" :radioLists="radioLists"></router-view>
   </i-scroll>
 </template>
 
@@ -99,11 +104,15 @@
       return {
         sliders: [], //
         discList: [],
-        radioList: [],
-        hotRadioList: [],
+        radioLists: [],
         newsongList: [],
         newsongTabs: [],
         isLoading: true,
+        radio: {
+          data: [],
+          scrollX: true,
+          scrollY: false
+        }
       }
     },
     created() {
@@ -111,16 +120,7 @@
       this._getSliders()
       this._getDiscList()
       this._getRadioList()
-      this._getRecommends()
-    },
-    updated() {
-      this.$nextTick(() => {
-        this._initBroadScroll()
-      })
-    },
-    watch: {
-      '$route' (to, from) {
-      }
+      this._getNewSongList()
     },
     methods: {
       handlePlaylist(playlist) {
@@ -185,6 +185,7 @@
         getDiscList().then((res) => {
           if (res.code === ERR_OK) {
             this.sendRequest(0)
+            // console.log(res.data);
             this.discList = res.data.list.slice(0,6)
           }
         })
@@ -193,38 +194,19 @@
         getRadioList().then((res) => {
           if (res.code === ERR_OK) {
             const data = res.data.data.groupList;
-            // console.log(data);
-            this.radioList = data;
-            this.hotRadioList = data[0].radioList;
+            this.radioLists = data;
+            this.radio.data = data[0].radioList;
           }
         })
       },
-      _getRecommends() {
-        getRecommends('new_song').then((res) => {
-          if (res.code === ERR_OK) {
-            this.newsongList = res.data.song_list
-            this.newsongTabs = res.data.type_info
-          }
-        })
+      _getNewSongList(i) {
+        getNewSongList(i).then((res) => {
+          this.newsongList = res.new_song.data.song_list || []
+          this.newsongTabs = res.new_song.data.type_info || []
+        }).catch((err) => {
+          this.newsongList = []
+        });
       },
-      _initBroadScroll(){
-        if (!this.broadScroll) {
-          this.broadScroll=new BScroll(this.$refs.broadContainer, {
-            startX:0,
-            click:true,
-            scrollX:true,
-            scrollY:false,
-            eventPassthrough:'vertical'
-          });
-        }else{
-          // let width=0
-          // for (let  i = 0; i <this.BroadcastingList.length; i++) {
-          //   width+=this.$refs.broadItem[0].getBoundingClientRect().width; //getBoundingClientRect() 返回元素的大小及其相对于视口的位置
-          // }
-          // this.$refs.broadUl.style.width=width+'px'
-          this.broadScroll.refresh()
-        }
-      }
     },
     components: {
       iScroll,
@@ -256,7 +238,7 @@
         padding-right: 3px
         text-align: right
         font-size: $font-size-g
-    .list-content
+    .list-ul
         display: inline-block
         padding: 0 3px
         margin-bottom: 6px
@@ -325,18 +307,19 @@
           color: $color
     .radio
       .container
+        display: inline-block
         width 100%
-        overflow: hidden;
-        ul.list-content
-          white-space: nowrap;
+        overflow: hidden
+        .list-ul
+          white-space: nowrap
           padding-bottom: 8px
           li.item
             box-sizing: border-box
-            flex-shrink: 0;
-            padding: 6px;
-            width: 86px;
+            flex-shrink: 0
+            padding: 6px
+            width: 86px
             height 86px
-            display: inline-block;
+            display: inline-block
             position: relative
             .icon
               width: 100%

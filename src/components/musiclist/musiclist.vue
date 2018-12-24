@@ -14,13 +14,9 @@
 </template>
 
 <script type="text/ecmascript-6">
-  // import {getSingerList} from '@/api/musiclist'
   import iBack from '@/base/back/back'
 
   const ERR_OK = 0
-  // const HOT_SINGER_LEN = 10
-  // const HOT_NAME = '热门'
-
   export default {
     name: 'musiclist',
     data() {
@@ -29,7 +25,7 @@
       }
     },
     created() {
-      // this._getSingerList()
+
     },
     methods: {
       show() {
@@ -61,7 +57,7 @@
     top: 0
     bottom: 0
     width: 100%
-    z-index: 10;
+    z-index: 10
     transition: all 0.2s linear
     -webkit-transition: all 0.2s linear
     .back-wrapper
@@ -70,6 +66,8 @@
       bottom: 0
       width: 100%
       height: 36px
+      line-height: 36px
+      z-index: 10
     .list-wrapper
       width: 100%
       height: calc(100% - 36px)

@@ -19,22 +19,22 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/variable.styl"
   .back
-    position: fixed
-    top: 0
-    left: 0
     width: 100%
+    height: 100%
     text-align: center
+    background: #fff
     background: $color-background
     .icon-cheveron-left
       display: inline-block
-      float: left
-      padding: 6px
+      position: absolute
+      left: 6px
+      top: 50%
+      transform: translateY(-50%)
+      width: 26px
       font-size: 24px
-      width: 20px
-      color: $color
+      text-align: center
     .title
       font-size: 15px
       font-weight: 600
-      padding: 8px
       display: inline-block
 </style>
