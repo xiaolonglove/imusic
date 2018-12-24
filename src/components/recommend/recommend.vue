@@ -81,7 +81,7 @@
       </div>
     </div>
     <i-loading v-show="isLoading"></i-loading>
-    <router-view :newsongList="newsongList" :newsongTabs="newsongTabs"></router-view>
+    <router-view :newsongList="newsongList" :newsongTabs="newsongTabs" v-on:sendRequest="sendRequest"></router-view>
   </i-scroll>
 </template>
 
@@ -107,7 +107,7 @@
       }
     },
     created() {
-      this.isLoading = true
+      this.sendRequest(1)
       this._getSliders()
       this._getDiscList()
       this._getRadioList()
@@ -171,6 +171,9 @@
         })
         return ret.join('/')
       },
+      sendRequest(state) {
+        this.isLoading = !!state
+      },
       _getSliders() {
         getSliders().then((res) => {
           if (res.code === ERR_OK) {
@@ -181,8 +184,7 @@
       _getDiscList() {
         getDiscList().then((res) => {
           if (res.code === ERR_OK) {
-            this.isLoading = false;
-            // console.log(res.data);
+            this.sendRequest(0)
             this.discList = res.data.list.slice(0,6)
           }
         })

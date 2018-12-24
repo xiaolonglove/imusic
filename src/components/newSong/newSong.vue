@@ -8,20 +8,23 @@
       </div>
       <div class="list-wrapper">
         <ul class="list-tabs" ref="newsongTab">
-          <li ref="newsongItem" class="tab" :class="{tabActive: type == i}" v-for="(item,i) in newsongTabs" :key="i">
+          <li ref="newsongItem" class="tab border-1px" :class="{tabActive: tabType == i}"
+          @click="selectTab(i)"
+          v-for="(item,i) in newsongTabs" :key="i"
+          >
             {{item.title}}
           </li>
         </ul>
         <i-scroll
-        :data="newsongList"
+        :data="songList"
         v-show="showFlag"
         class="scrollContainer"
         ref="scrollContainer">
           <ul class="list-content" ref="newsongUl">
-            <li ref="newsongItem" class="item"  v-for="(item,i) in newsongList" :key="i">
+            <li ref="newsongItem" class="item"  v-for="(item,i) in songList" :key="i">
               <div class="icon">
-                <p class="name" v-html="item.name"></p>
-                <p class="desc" v-html="newsongSinger(item.singer)"></p>
+                <p class="name" v-html="newsongName(item.name, item.subtitle)"></p>
+                <p class="desc" v-html="newsongSingerName(item.singer)"></p>
               </div>
               <i class="icon-dots-horizontal-triple"></i>
             </li>
@@ -54,16 +57,18 @@
     },
     data() {
       return {
+        songList: this.newsongList,
         showFlag: true,
-        type: 0
+        tabType: 0
       }
     },
     created() {
       this.probeType = 1
       this.listenScroll = true
-      // this._getNewSongList()
-      console.log(this.newsongList);
-      console.log(this.newsongTabs);
+      if(!!this.newsongList) {
+        // 父组件没有传值，需要发送请求
+        this._getNewSongList()
+      }
     },
     methods: {
       show() {
@@ -77,11 +82,16 @@
           })
         }, 300);
       },
-      newsongItemImg(mid) {
-        const url = 'https://y.gtimg.cn/music/photo_new/T002R90x90M000'+ mid +'.jpg?max_age=2592000'
-        return url
+      selectTab(i) {
+        if(this.tabType === i) return false
+        this.tabType = i
+        this.$emit('sendRequest', 1)
+        this._getNewSongList(i)
       },
-      newsongSinger(singerList) {
+      newsongName(name, subtitle) {
+        return !!subtitle? name + " " + subtitle: name
+      },
+      newsongSingerName(singerList) {
         let ret = []
         if (!singerList) {
           return ''
@@ -91,10 +101,18 @@
         })
         return ret.join('/')
       },
-      _getNewSongList() {
-        getNewSongList().then((res) => {
-          console.log(res.new_song.data.song_list);
-        })
+      newsongItemImg(mid) {
+        const url = 'https://y.gtimg.cn/music/photo_new/T002R90x90M000'+ mid +'.jpg?max_age=2592000'
+        return url
+      },
+      _getNewSongList(i) {
+        getNewSongList(i).then((res) => {
+          this.$emit('sendRequest', 0)
+          this.songList = res.new_song.data.song_list || []
+        }).catch((err) => {
+          this.$emit('sendRequest', 0)
+          this.songList = []
+        });
       },
     },
     components: {
@@ -106,6 +124,8 @@
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/variable.styl"
+  @import "../../common/stylus/mixin.styl"
+
   .slide-enter-active, .slide-leave-active
     transition: all 0.3s
   .slide-enter, .slide-leave-to
@@ -140,16 +160,17 @@
         position: fixed
         z-index: 10
         li.tab
-          box-sizing: border-box
-          width: 50px
           float: left
+          width: 36px
+          margin: 0 6px
+          box-sizing: border-box
+          text-align: center
           &.tabActive
+            border-1px($color-theme)
             color: $color-theme
       .scrollContainer
         width: 100%
-        margin-top: 26px
-        // height: calc(100% - 26px)
-        padding: 6px 0
+        margin-top: 30px
         .list-content
           display: inline-block
           width: 100%
@@ -159,8 +180,9 @@
             box-sizing: border-box
             width: 100%
             padding: 6px
+            border-top: 1px solid $color-background-line;
             .icon
-              width: 100%
+              width: calc(100% - 50px)
               position: relative
               padding-left: 8px
               img
@@ -171,7 +193,7 @@
                 white-space: nowrap
                 overflow: hidden
               .name
-                width: calc(100% - 2px)
+                width: 100%
                 height: 14px
                 line-height: 14px
                 margin-top: 5px
@@ -182,7 +204,7 @@
               .desc
                 padding: 3px 0
                 color: $color-text-weak
-                
+                width: 100%
             i
               width: 40px
               display: flex
