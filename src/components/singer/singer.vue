@@ -122,6 +122,7 @@
       bottom: 0
       width: 100%
       height: 36px
+      line-height: 36px
     .list-wrapper
       width: 100%
       height: calc(100% - 36px)

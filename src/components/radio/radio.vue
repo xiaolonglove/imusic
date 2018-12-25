@@ -9,11 +9,11 @@
       <div class="list-wrapper">
         <!-- <div class="tabsContainer"> -->
         <i-scroll
-        v-show="radioLists.length"
-        :scroll-x="scrollX"
-        :scroll-y="scrollY"
-        :data="radioLists"
-        class="tabsContainer"
+          v-show="radioLists.length"
+          :scroll-x="scrollX"
+          :scroll-y="scrollY"
+          :data="radioLists"
+          class="tabsContainer"
         >
           <ul class="list-tabs">
             <li class="tab border-1px" :class="{tabActive: tabType == item.type}"
@@ -191,7 +191,6 @@
             width: 36px
             height: 100%
             margin: 0 6px
-            box-sizing: border-box
             text-align: center
             &.tabActive
               border-1px($color-theme)
