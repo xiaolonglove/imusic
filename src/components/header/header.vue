@@ -9,7 +9,7 @@
     <router-link tag="div" class="tab-item" to="/recommend">
       <span class="tab-link border-1px">推荐</span>
     </router-link>
-    <router-link tag="div" class="tab-item" to="/rank">
+    <router-link tag="div" class="tab-item" to="/discovery">
       <span class="tab-link border-1px">发现
       </span>
     </router-link>

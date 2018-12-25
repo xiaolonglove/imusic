@@ -38,10 +38,8 @@
       hide() {
         this.showFlag = false
         setTimeout(() => {
-          this.$router.push({
-            path: '/recommend'
-          })
-        }, 300);
+          this.$router.go(-1)
+        }, 300)
       },
       _getSingerList() {
         getSingerList().then((res) => {

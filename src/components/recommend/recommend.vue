@@ -1,97 +1,98 @@
 <template>
-  <i-scroll ref="scroll" class="recommend" :data="newsongList">
-    <div>
-      <div class="slider-wrapper" v-if="sliders.length" ref="sliderWrapper">
-        <i-slider>
-          <div v-for="(item,i) in sliders" :key="i">
-            <a href="javascript:void(0)">
-              <img class="needsclick" @load="loadImage" :src="item.picUrl">
-            </a>
-          </div>
-        </i-slider>
-      </div>
-      <div class="tab-wrapper">
-        <router-link tag="div" class="tab-item" to="/musiclist">
-          <i class="icon-playlist"></i>
-          <span>歌单</span>
-        </router-link>
-        <router-link tag="div" class="tab-item" to="/singer">
-          <i class="icon-user"></i>
-          <span>歌手</span>
-        </router-link>
-        <router-link tag="div" class="tab-item" to="/radio">
-          <i class="icon-wallet"></i>
-          <span>电台</span>
-        </router-link>
-        <router-link tag="div" class="tab-item" to="/top">
-          <i class="icon-chart-bar"></i>
-          <span>排行</span>
-        </router-link>
-      </div>
-      <i-split />
-      <div class="wrapper musiclistRecommend">
-        <h1 class="title">
-          热门歌单推荐
-          <router-link tag="i" class="icon-cheveron-right" to="/musiclist"></router-link>
-        </h1>
-        <ul class="list-ul">
-          <li @click="selectMusiclist(item)" v-for="(item,i) in discList" class="item" :key="i">
-            <div class="icon">
-              <img v-lazy="item.imgurl">
-              <div class="detail">
-                <!-- <h2 class="name" v-html="item.creator.name"></h2> -->
-                <i class="icon-headphones"></i>
-                <span class="listennum">{{itemlistennum(item.listennum)}}</span>
-              </div>
+  <div class="recommend">
+    <i-scroll class="recommend-scroll" ref="scroll" :data="newsongList">
+      <div>
+        <div class="slider-wrapper" v-if="sliders.length" ref="sliderWrapper">
+          <i-slider>
+            <div v-for="(item,i) in sliders" :key="i">
+              <a href="javascript:void(0)">
+                <img class="needsclick" @load="loadImage" :src="item.picUrl">
+              </a>
             </div>
-            <p class="desc" v-html="item.dissname"></p>
-          </li>
-        </ul>
-      </div>
-      <i-split />
-      <div class="wrapper radio">
-        <h1 class="title">
-          精选电台
-          <router-link tag="i" class="icon-cheveron-right" to="/radio"></router-link>
-        </h1>
-        <i-scroll ref="broadContainer" class="container" :data="radio.data" :scroll-x="radio.scrollX" :scroll-y="radio.scrollY">
-        <!-- <div class="container" ref="broadContainer"> -->
-          <ul class="list-ul" ref="broadUl">
-            <li ref="broadItem" class="item" @click="selectBroadcasting(item)" v-for="(item,i) in radio.data" :key="i">
+          </i-slider>
+        </div>
+        <div class="tab-wrapper">
+          <router-link tag="div" class="tab-item" to="/musicCategory">
+            <i class="icon-playlist"></i>
+            <span>歌单</span>
+          </router-link>
+          <router-link tag="div" class="tab-item" to="/singer">
+            <i class="icon-user"></i>
+            <span>歌手</span>
+          </router-link>
+          <router-link tag="div" class="tab-item" to="/radio">
+            <i class="icon-wallet"></i>
+            <span>电台</span>
+          </router-link>
+          <router-link tag="div" class="tab-item" to="/top">
+            <i class="icon-chart-bar"></i>
+            <span>排行</span>
+          </router-link>
+        </div>
+        <i-split />
+        <div class="wrapper musicCategory">
+          <h1 class="title">
+            热门歌单推荐
+            <router-link tag="i" class="icon-cheveron-right" to="/musicCategory"></router-link>
+          </h1>
+          <ul class="list-ul">
+            <li @click="selectMusiclist(item)" v-for="(item,i) in discList" class="item" :key="i">
               <div class="icon">
-                <img v-lazy="item.radioImg">
-                <span class="listennum">{{itemlistennum(item.listenNum)}}</span>
-                <p class="desc" v-html="item.radioName"></p>
+                <img v-lazy="item.imgurl">
+                <div class="detail">
+                  <!-- <h2 class="name" v-html="item.creator.name"></h2> -->
+                  <i class="icon-headphones"></i>
+                  <span class="listennum">{{itemlistennum(item.listennum)}}</span>
+                </div>
+              </div>
+              <p class="desc" v-html="item.dissname"></p>
+            </li>
+          </ul>
+        </div>
+        <i-split />
+        <div class="wrapper radio">
+          <h1 class="title">
+            精选电台
+            <router-link tag="i" class="icon-cheveron-right" to="/radio"></router-link>
+          </h1>
+          <i-scroll ref="broadContainer" class="container" :data="radio.data" :scroll-x="radio.scrollX" :scroll-y="radio.scrollY">
+          <!-- <div class="container" ref="broadContainer"> -->
+            <ul class="list-ul" ref="broadUl">
+              <li ref="broadItem" class="item" @click="selectBroadcasting(item)" v-for="(item,i) in radio.data" :key="i">
+                <div class="icon">
+                  <img v-lazy="item.radioImg">
+                  <span class="listennum">{{itemlistennum(item.listenNum)}}</span>
+                  <p class="desc" v-html="item.radioName"></p>
+                </div>
+              </li>
+            </ul>
+          <!-- </div> -->
+          </i-scroll>
+        </div>
+        <i-split />
+        <div class="wrapper newsong">
+          <h1 class="title">
+            新歌首发
+            <router-link tag="i" class="icon-cheveron-right" to="/newsong"></router-link>
+          </h1>
+          <ul class="list-ul" ref="newsongUl">
+            <li ref="newsongItem" class="item"  v-for="(item,i) in newsongList.slice(0,6)" :key="i">
+              <div class="icon">
+                <img v-lazy="newsongItemImg(item.album.mid)">
+                <p class="name" v-html="item.name"></p>
+                <p class="desc" v-html="newsongSinger(item.singer)"></p>
               </div>
             </li>
           </ul>
-        <!-- </div> -->
-        </i-scroll>
+        </div>
       </div>
-      <i-split />
-      <div class="wrapper newsong">
-        <h1 class="title">
-          新歌首发
-          <router-link tag="i" class="icon-cheveron-right" to="/newsong"></router-link>
-        </h1>
-        <ul class="list-ul" ref="newsongUl">
-          <li ref="newsongItem" class="item"  v-for="(item,i) in newsongList.slice(0,6)" :key="i">
-            <div class="icon">
-              <img v-lazy="newsongItemImg(item.album.mid)">
-              <p class="name" v-html="item.name"></p>
-              <p class="desc" v-html="newsongSinger(item.singer)"></p>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </div>
+    </i-scroll>
     <i-loading v-show="isLoading"></i-loading>
     <router-view @sendRequest="sendRequest" :newsongList="newsongList" :newsongTabs="newsongTabs" :radioLists="radioLists"></router-view>
-  </i-scroll>
+  </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import BScroll from 'better-scroll';
   import {getRecommends, getSliders, getDiscList, getRadioList, getNewSongList} from '@/api/recommend'
   import iScroll from '@/base/scroll/scroll'
   import iLoading from '@/base/loading/loading'
@@ -133,12 +134,6 @@
           this.checkloaded = true
           this.$refs.scroll.refresh()
         }
-      },
-      musiclistRecommend(item) {
-        // this.$router.push({
-        //   path: `/recommend/${item.dissid}`
-        // })
-        // this.setDisc(item)
       },
       selectBroadcasting(item) {
         // this.$router.push({
@@ -239,11 +234,12 @@
         text-align: right
         font-size: $font-size-g
     .list-ul
-        display: inline-block
-        padding: 0 3px
-        margin-bottom: 6px
+      display: inline-block
+      padding: 0 3px
+      margin-bottom: 6px
   // detail
-  .recommend
+  .recommend, .recommend-scroll
+    width: 100%
     height: 100%
     overflow: hidden
     .slider-wrapper
@@ -265,7 +261,7 @@
           font-size: $font-size-large-x
         span
           font-weight: 600
-    .musiclistRecommend
+    .musicCategory
       li.item
         display: flex
         flex-direction: column

@@ -79,10 +79,8 @@
       hide() {
         this.showFlag = false
         setTimeout(() => {
-          this.$router.push({
-            path: '/recommend'
-          })
-        }, 300);
+          this.$router.go(-1)
+        }, 300)
       },
       selectTab(i) {
         if(this.tabType === i) return false
@@ -216,7 +214,7 @@
             i
               width: 40px
               display: flex
-              font-size: 20px
+              font-size: 18px
               align-items: center
               justify-content: center
 </style>

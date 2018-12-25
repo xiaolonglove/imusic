@@ -4,13 +4,12 @@
       <div class="back-wrapper" @click="hide">
         <i-back :title="'排行榜'"></i-back>
       </div>
-      <!-- <div class="list-wrapper"> -->
       <i-scroll
         v-show="topLists.length"
         :data="topLists"
         class="list-wrapper"
       >
-       <ul class="list-group">
+        <ul class="list-group">
           <li class="group" v-for="group in topLists" :key="group.GroupID">
             <div class="group-title">{{groupTitle(group.GroupName)}}</div>
             <ul class="group-ulbox">
@@ -35,7 +34,6 @@
           </li>
         </ul>
       </i-scroll>
-      <!-- </div> -->
     </div>
   </transition>
 </template>
@@ -64,9 +62,7 @@
       hide() {
         this.showFlag = false
         setTimeout(() => {
-          this.$router.push({
-            path: '/recommend'
-          })
+          this.$router.go(-1)
         }, 300);
       },
       sendRequest(state) {
@@ -77,7 +73,6 @@
         getTopList().then((res) => {
           this.sendRequest(0)
           this.topLists = res;
-          console.log(res);
         }).catch((err) => {
           this.sendRequest(0)
           
@@ -106,6 +101,7 @@
   .slide-enter, .slide-leave-to
     transform: translate3d(100%, 0, 0)
   .top
+    left: 0
     position: fixed
     top: 0
     bottom: 0
@@ -139,7 +135,7 @@
             font-weight: 600
           .group-ulbox
             .item
-              background: $color-background-l
+              background: $color-background-line
               display: flex
               flex-direction: row
               border-radius: 8px

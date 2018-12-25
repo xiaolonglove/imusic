@@ -1,6 +1,6 @@
 <template>
   <div class="discovery">
-    排行
+    发现
   </div>
 </template>
 
