@@ -26,15 +26,16 @@
       newsongName(name, subtitle) {
         return !!subtitle? name + " " + subtitle: name
       },
-      newsongSingerName(singerList) {
-        let ret = []
-        if (!singerList) {
-          return ''
+      newsongSingerName(singers) {
+        if("string" === typeof singers) {
+          return singers
+        }else if(Array.isArray(singers)) {
+          let ret = []
+          singers.forEach((s) => {
+            ret.push(s.name)
+          })
+          return ret.join('/')
         }
-        singerList.forEach((s) => {
-          ret.push(s.name)
-        })
-        return ret.join('/')
       }
     }
   }

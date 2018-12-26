@@ -3,10 +3,11 @@ import Router from 'vue-router'
 import Mymusic from '@/components/mymusic/mymusic'
 import Recommend from '@/components/recommend/recommend'
 import Discovery from '@/components/discovery/discovery'
-import Musiclist from '@/components/musiclist/musiclist'
+import MymusicList from '@/components/mymusicList/mymusicList'
 import User from '@/components/user/user'
 import Search from '@/components/search/search'
 import Singer from '@/components/singer/singer'
+import SingerDetail from '@/components/singerDetail/singerDetail'
 import MusicCategory from '@/components/musicCategory/musicCategory'
 import Radio from '@/components/radio/radio'
 import Top from '@/components/top/top'
@@ -26,8 +27,8 @@ export default new Router({
       component: Mymusic,
       children: [
         {
-          path: '/musiclist',
-          component: Musiclist
+          path: '/mymusicList',
+          component: MymusicList
         }
       ]
     },
@@ -37,7 +38,13 @@ export default new Router({
       children: [
         {
           path: '/singer',
-          component: Singer
+          component: Singer,
+          children: [
+            {
+              path: ':id',
+              component: SingerDetail,
+            }
+          ]
         },
         {
           path: '/musicCategory',

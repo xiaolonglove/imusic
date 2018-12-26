@@ -1,8 +1,6 @@
 <template>
   <transition name="slide">
-    <div class="musiclist
-    " v-show="showFlag" ref="musiclist
-    ">
+    <div class="musiclist" v-show="showFlag">
       <div class="back-wrapper">
         <i class="icon-cheveron-left" @click="hide"></i>
         <ul class="list-tabs">
@@ -54,7 +52,6 @@
     },
     created() {
       this.selectTab()
-      // this._getNewSongList()
     },
     methods: {
       show() {
@@ -79,7 +76,7 @@
             this.songList = []
             break;
           case 1:
-            this._getNewSongList(0)
+            this.songList = []
             break;
           case 2:
             this.songList = []
@@ -128,7 +125,7 @@
     top: 0
     bottom: 0
     width: 100%
-    z-index: 10;
+    z-index: 10
     transition: all 0.2s linear
     -webkit-transition: all 0.2s linear
     .back-wrapper
@@ -144,12 +141,13 @@
       .icon-cheveron-left
         display: inline-block
         position: absolute
-        left: 6px
+        left: 0
         top: 50%
         transform: translateY(-50%)
         width: 38px
+        padding: 6px 0
         font-size: 24px
-        text-align: left
+        text-align: center
       .list-tabs
         display: inline-block
         height: 100%

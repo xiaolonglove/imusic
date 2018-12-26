@@ -9,7 +9,7 @@
       <li v-for="(group,i) in data" class="list-group" ref="listGroup" :key="i">
         <h2 class="list-group-title">{{group.title}}</h2>
         <uL>
-          <li @click="selectItem(item)" v-for="(item,i) in group.items" class="list-group-item" :key="i">
+          <li @click="selectSinger(item)" v-for="(item,i) in group.items" class="list-group-item" :key="i">
             <img class="avatar" :src="item.avatar">
             <span class="name">{{item.name}}</span>
           </li>
@@ -74,8 +74,8 @@
       this.listHeight = []
     },
     methods: {
-      selectItem(item) {
-        this.$emit('select', item)
+      selectSinger(item) {
+        this.$emit('selectSinger', item)
       },
       onShortcutTouchStart(e) {
         let anchorIndex = getData(e.target, 'index')
@@ -205,7 +205,7 @@
           font-size: $font-size-medium
     .list-shortcut
       position: absolute
-      z-index: 30
+      z-index: 10
       right: 0
       top: 50%
       transform: translateY(-50%)

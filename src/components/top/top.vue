@@ -1,8 +1,8 @@
 <template>
   <transition name="slide">
     <div class="top" v-show="showFlag">
-      <div class="back-wrapper" @click="hide">
-        <i-back :title="'排行榜'"></i-back>
+      <div class="back-wrapper">
+        <i-back :title="'排行榜'" @hide="hide"></i-back>
       </div>
       <i-scroll
         v-show="topLists.length"

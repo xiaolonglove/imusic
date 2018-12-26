@@ -1,6 +1,6 @@
 <template>
   <div class="back">
-    <i class="icon-cheveron-left"></i>
+    <i class="icon-cheveron-left" @click="hide"></i>
     <span class="title">{{title}}</span>
   </div>
 </template>
@@ -11,6 +11,11 @@
       title: {
         type: String,
         default: ''
+      }
+    },
+    methods: {
+      hide() {
+        this.$emit('hide')
       }
     },
   }
@@ -26,10 +31,11 @@
     .icon-cheveron-left
       display: inline-block
       position: absolute
-      left: 6px
+      left: 0
       top: 50%
       transform: translateY(-50%)
-      width: 26px
+      width: 38px
+      padding: 6px 0
       font-size: 24px
       text-align: center
     .title

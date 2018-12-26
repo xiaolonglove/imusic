@@ -3,8 +3,8 @@
     <div class="musiclist
     " v-show="showFlag" ref="musiclist
     ">
-      <div class="back-wrapper" @click="hide">
-        <i-back :title="'歌单分类'"></i-back>
+      <div class="back-wrapper">
+        <i-back :title="'歌单分类'" @hide="hide"></i-back>
       </div>
       <div class="list-wrapper">
         歌单分类

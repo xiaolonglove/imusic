@@ -3,8 +3,8 @@
     <div class="radio
     " v-show="showFlag" ref="radio
     ">
-      <div class="back-wrapper" @click="hide">
-        <i-back :title="'电台'"></i-back>
+      <div class="back-wrapper">
+        <i-back :title="'电台'" @hide="hide"></i-back>
       </div>
       <div class="list-wrapper">
         <!-- <div class="tabsContainer"> -->
@@ -152,7 +152,7 @@
     top: 0
     bottom: 0
     width: 100%
-    z-index: 10;
+    z-index: 10
     transition: all 0.2s linear
     -webkit-transition: all 0.2s linear
     .back-wrapper

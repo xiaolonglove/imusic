@@ -3,23 +3,24 @@
     <i-scroll class="mymusic-scroll" ref="mymusic" :data="data">
       <div>
         <div class="tab-wrapper">
-          <router-link tag="div" class="tab-item" to="/musiclist" @click.native="selectTab(0)">
+          <router-link tag="div" class="tab-item" to="/mymusiclist" @click.native="selectTab(0)">
             <i class="icon-music-notes"></i>
             <span>本地音乐</span>
           </router-link>
-          <router-link tag="div" class="tab-item" to="/musiclist" @click.native="selectTab(1)">
+          <router-link tag="div" class="tab-item" to="/mymusiclist" @click.native="selectTab(1)">
             <i class="icon-heart"></i>
             <span>收藏音乐</span>
           </router-link>
-          <router-link tag="div" class="tab-item" to="/musiclist" @click.native="selectTab(2)">
+          <router-link tag="div" class="tab-item" to="/mymusiclist" @click.native="selectTab(2)">
             <i class="icon-chart-pie"></i>
             <span>最近播放</span>
           </router-link>
         </div>
+        <i-split />
         <div class="wrapper musiclistFavorite">
-          <h1 class="title">收藏歌单</h1>
-          <ul class="list-ul">
-            <li @click="selectMusiclist(item)" v-for="(item,i) in discList" class="item" :key="i">
+          <h1 class="title">收藏歌单 <span>{{favoriteList.length}}</span></h1>
+          <ul class="list-ul" v-show="!!favoriteList.length">
+            <li @click="selectMusiclist(item)" v-for="(item,i) in favoriteList" class="item" :key="i">
               <div class="left">
                 <img v-lazy="item.imgurl">
               </div>

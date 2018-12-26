@@ -1,12 +1,13 @@
 <template>
   <transition name="slide">
     <div class="singer" v-show="showFlag" ref="singer">
-      <div class="back-wrapper" @click="hide">
-        <i-back :title="'歌手'"></i-back>
+      <div class="back-wrapper">
+        <i-back :title="'歌手'" @hide="hide"></i-back>
       </div>
       <div class="list-wrapper">
-        <singer-list ref="list" :data="singers"></singer-list>
+        <singer-list ref="list" @selectSinger="selectSinger" :data="singerList"></singer-list>
       </div>
+      <router-view :singer="singer"></router-view>
     </div>
   </transition>
 </template>
@@ -24,7 +25,8 @@
     name: 'singer',
     data() {
       return {
-        singers: [],
+        singerList: [],
+        singer: {},
         showFlag: true
       }
     },
@@ -41,10 +43,16 @@
           this.$router.go(-1)
         }, 300)
       },
+      selectSinger(singer) {
+        this.singer = singer
+        this.$router.push({
+          path: `/singer/${singer.id}`
+        })
+      },
       _getSingerList() {
         getSingerList().then((res) => {
           if (res.code === ERR_OK) {
-            this.singers = this._normalizeSinger(res.data.list)
+            this.singerList = this._normalizeSinger(res.data.list)
           }
         })
       },
@@ -56,7 +64,7 @@
           }
         }
         list.forEach((item, index) => {
-          const singer = this.singer(item.Fsinger_mid, item.Fsinger_name);
+          const singer = this.computedSinger(item.Fsinger_mid, item.Fsinger_name);
           if (index < HOT_SINGER_LEN) {
             map.hot.items.push(singer)
           }
@@ -85,7 +93,7 @@
         })
         return hot.concat(ret)
       },
-      singer(id, name) {
+      computedSinger(id, name) {
         return {
           id: id,
           name: name,
@@ -111,7 +119,7 @@
     top: 0
     bottom: 0
     width: 100%
-    z-index: 10;
+    z-index: 10
     transition: all 0.2s linear
     -webkit-transition: all 0.2s linear
     .back-wrapper
