@@ -15,16 +15,16 @@
         </ul>
       </div>
       <div class="list-wrapper">
+        <i-nothing v-show="!songList.length" :iconClass="selectIconClass()" />
         <i-scroll
           :data="songList"
-          v-show="showFlag"
           class="scrollContainer"
+          v-show="!!songList.length" 
         >
-          <i-list @selectmusic="selectmusic" :list="songList" />
+          <i-list @selectmusic="selectmusic" :list="songList"/>
         </i-scroll>
       </div>
     </div>
-    
   </transition>
 </template>
 
@@ -32,6 +32,7 @@
   import {getNewSongList} from '@/api/recommend'
   import iScroll from '@/base/scroll/scroll'
   import iList from '@/base/list/list'
+  import iNothing from '@/base/nothing/nothing'
 
   const ERR_OK = 0
   export default {
@@ -47,16 +48,12 @@
         songList: [],
         showFlag: true,
         tabType: this.selectTabtype,
-        tabs: ['本地音乐', '收藏音乐', '最近播放' ]
-      }
-    },
-    watch: {
-      '$route' (to, from) {
-        console.log(from, to);
+        tabs: ['本地音乐', '收藏音乐', '最近播放'],
+        iconClass: ['icon-music-notes', 'icon-heart', 'icon-chart-pie']
       }
     },
     created() {
-      console.log(this.selectTabtype);
+      this.selectTab()
       // this._getNewSongList()
     },
     methods: {
@@ -74,13 +71,15 @@
       },
       selectTab(i) {
         if(this.tabType === i) return false
-        this.tabType = i
-        switch (i) {
+        if(i || i === 0) {
+          this.tabType = i
+        }
+        switch (this.tabType) {
           case 0:
             this.songList = []
             break;
           case 1:
-            this._getNewSongList(i)
+            this._getNewSongList(0)
             break;
           case 2:
             this.songList = []
@@ -89,22 +88,8 @@
             break;
         }
       },
-      newsongName(name, subtitle) {
-        return !!subtitle? name + " " + subtitle: name
-      },
-      newsongSingerName(singerList) {
-        let ret = []
-        if (!singerList) {
-          return ''
-        }
-        singerList.forEach((s) => {
-          ret.push(s.name)
-        })
-        return ret.join('/')
-      },
-      newsongItemImg(mid) {
-        const url = 'https://y.gtimg.cn/music/photo_new/T002R90x90M000'+ mid +'.jpg?max_age=2592000'
-        return url
+      selectIconClass() {
+        return this.iconClass[this.tabType]
       },
       _getNewSongList(i) {
         this.sendRequest(1)
@@ -124,7 +109,8 @@
     },
     components: {
       iScroll,
-      iList
+      iList,
+      iNothing
     }
   }
 </script>

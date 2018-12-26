@@ -20,11 +20,11 @@
     top: 50%;
     z-index: 10000;
     transform: translateY(-50%);
+    text-align: center;
   }
   .loading {
-    width: 150px;
+    display: inline-block;
     height: 15px;
-    margin: 0 auto;
   }
   .loading span {
     display: inline-block;

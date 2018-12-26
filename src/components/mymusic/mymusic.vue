@@ -3,15 +3,15 @@
     <i-scroll class="mymusic-scroll" ref="mymusic" :data="data">
       <div>
         <div class="tab-wrapper">
-          <router-link tag="div" class="tab-item" to="/musiclist">
+          <router-link tag="div" class="tab-item" to="/musiclist" @click.native="selectTab(0)">
             <i class="icon-music-notes"></i>
             <span>本地音乐</span>
           </router-link>
-          <router-link tag="div" class="tab-item" to="/musiclist" @click="selectTab(1)">
+          <router-link tag="div" class="tab-item" to="/musiclist" @click.native="selectTab(1)">
             <i class="icon-heart"></i>
             <span>收藏音乐</span>
           </router-link>
-          <router-link tag="div" class="tab-item" to="/musiclist" @click="selectTab(2)">
+          <router-link tag="div" class="tab-item" to="/musiclist" @click.native="selectTab(2)">
             <i class="icon-chart-pie"></i>
             <span>最近播放</span>
           </router-link>
@@ -52,6 +52,7 @@
         </div>
       </div>
     </i-scroll>
+    <i-loading v-show="isLoading"></i-loading>
     <router-view  @sendRequest="sendRequest" :selectTabtype="tabtype"></router-view>
   </div>
 </template>
@@ -59,6 +60,7 @@
 <script type="text/ecmascript-6">
   import {getDiscList} from '@/api/recommend'
   import iScroll from '@/base/scroll/scroll'
+  import iLoading from '@/base/loading/loading'
   import iSplit from '@/base/split/split'
 
   const ERR_OK = 0
@@ -67,6 +69,7 @@
     data() {
       return {
         data: [],
+        isLoading: true,
         favoriteList: [],
         discList: [],
         tabtype: 0
@@ -80,7 +83,6 @@
 
       },
       selectTab(i) {
-        console.log(i);
         this.tabtype = i
       },
       _getDiscList() {
@@ -104,6 +106,7 @@
     components: {
       iScroll,
       iSplit,
+      iLoading
     }
   }
 </script>

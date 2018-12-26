@@ -57,7 +57,7 @@
       .icon
         width: calc(100% - 50px)
         position: relative
-        padding-left: 8px
+        padding-left: 12px
         img
           width: 100%
           border-radius: 5px
@@ -69,7 +69,7 @@
           width: 100%
           height: 14px
           line-height: 14px
-          margin-top: 5px
+          padding: 2px 0
           border-bottom-right-radius: 6px
           border-bottom-left-radius: 6px
           color: $color
@@ -84,4 +84,5 @@
         font-size: 20px
         align-items: center
         justify-content: center
+        color: $color-text-weak
 </style>

@@ -16,21 +16,14 @@
           </li>
         </ul>
         <i-scroll
-        :data="songList"
-        :listen-scroll="listenScroll"
-        :probe-type="probeType"
-        v-show="showFlag"
-        class="scrollContainer"
-        ref="scrollContainer">
-          <ul class="list-content" ref="newsongUl">
-            <li ref="newsongItem" class="item"  v-for="(item,i) in songList" :key="i">
-              <div class="icon">
-                <p class="name" v-html="newsongName(item.name, item.subtitle)"></p>
-                <p class="desc" v-html="newsongSingerName(item.singer)"></p>
-              </div>
-              <i class="icon-dots-horizontal-triple"></i>
-            </li>
-          </ul>
+          :data="songList"
+          :listen-scroll="listenScroll"
+          :probe-type="probeType"
+          v-show="showFlag"
+          class="scrollContainer"
+          ref="scrollContainer"
+        >
+          <i-list @selectmusic="selectmusic" :list="songList" />
         </i-scroll>
       </div>
     </div>
@@ -42,6 +35,7 @@
   import {getNewSongList} from '@/api/recommend'
   import iScroll from '@/base/scroll/scroll'
   import iBack from '@/base/back/back'
+  import iList from '@/base/list/list'
 
   const ERR_OK = 0
 
@@ -87,6 +81,9 @@
         this.tabType = i
         this._getNewSongList(i)
       },
+      selectmusic(item) {
+        console.log(item);
+      },
       newsongName(name, subtitle) {
         return !!subtitle? name + " " + subtitle: name
       },
@@ -123,6 +120,7 @@
     components: {
       iBack,
       iScroll,
+      iList
     }
   }
 </script>
