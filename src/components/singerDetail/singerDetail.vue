@@ -126,11 +126,13 @@
         this.$refs.filter.style[backdrop] = `blur(${blur}px)`
         if(newVal < this.minTransalteY + 50 && newVal >= this.minTransalteY) {
           this.$refs.playBtn.style.display = 'none'
+          zIndex = 1
+          this.$refs.bgImage.style.paddingTop = '60%'
+          this.$refs.bgImage.style.height = `${RESERVED_HEIGHT}px`
         }else if (newVal < this.minTransalteY) {
           zIndex = 40
           this.$refs.bgImage.style.paddingTop = 0
           this.$refs.bgImage.style.height = `${RESERVED_HEIGHT}px`
-          // this.$refs.playBtn.style.display = 'none'
         } else {
           this.$refs.bgImage.style.paddingTop = '60%'
           this.$refs.bgImage.style.height = 0
@@ -201,7 +203,7 @@
     .bg-layer
       position: relative
       height: 100%
-      background: $color-background
+      z-index 2
       .play-wrapper
         position: absolute
         top: -40px
@@ -235,4 +237,5 @@
       background: $color-background
       .list
         padding: 0
+        background: $color-background
 </style>
