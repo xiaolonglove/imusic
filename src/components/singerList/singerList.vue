@@ -5,7 +5,7 @@
     :data="data"
     class="listview"
     ref="listview">
-    <ul>
+    <ul class="contentWrapper">
       <li v-for="(group,i) in data" class="list-group" ref="listGroup" :key="i">
         <h2 class="list-group-title">{{group.title}}</h2>
         <uL>
@@ -183,7 +183,7 @@
     overflow: hidden
     background: $color-background
     .list-group
-      padding-bottom: 30px
+      padding-bottom: 20px
       .list-group-title
         height: 30px
         line-height: 30px

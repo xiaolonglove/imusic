@@ -4,15 +4,32 @@
     <div class="container">
       <router-view/>
     </div>
+    <i-footer :songPlay="songPlay"></i-footer>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import iHeader from '@/components/header/header'
+  import iFooter from '@/components/footer/footer'
   export default {
     name: 'App',
+    data() {
+      return {
+        songPlay: {
+          album:"绅士",
+          duration:261,
+          id:102636799,
+          image:"https://y.gtimg.cn/music/photo_new/T002R300x300M000003y8dsH2wBHlo.jpg?max_age=2592000",
+          mid:"001Qu4I30eVFYb",
+          name:"演员",
+          singer:"薛之谦",
+          url:"http://ws.stream.qqmusic.qq.com/102636799.m4a?fromtag=46",
+        }
+      }
+    },
     components: {
-      iHeader
+      iHeader,
+      iFooter,
     }
   }
 </script>

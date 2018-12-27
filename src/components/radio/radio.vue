@@ -29,7 +29,7 @@
         v-show="radios.length"
         :data="radios"
         class="scrollContainer">
-          <ul class="list-content">
+          <ul class="list-content contentWrapper">
             <li class="item" v-for="(item,i) in radios" :key="i">
               <div class="icon">
                 <img v-lazy="item.radioImg">
@@ -104,7 +104,8 @@
       hide() {
         this.showFlag = false
         setTimeout(() => {
-          this.$router.go(-1)
+          // this.$router.go(-1)
+          this.$router.push('./recommend')
         }, 300)
       },
       selectTab(type) {
@@ -199,7 +200,7 @@
         .list-content
           display: inline-block
           width: 100%
-          padding: 5px
+          padding-top: 6px
           // text-align: center
           li.item
             box-sizing: border-box

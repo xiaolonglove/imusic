@@ -60,7 +60,8 @@
       hide() {
         this.showFlag = false
         setTimeout(() => {
-          this.$router.go(-1)
+          // this.$router.go(-1)
+          this.$router.push('./mymusic')
         }, 300)
       },
       selectmusic(item) {
@@ -77,6 +78,7 @@
             break;
           case 1:
             this.songList = []
+            // this._getNewSongList()
             break;
           case 2:
             this.songList = []

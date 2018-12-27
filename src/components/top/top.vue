@@ -9,7 +9,7 @@
         :data="topLists"
         class="list-wrapper"
       >
-        <ul class="list-group">
+        <ul class="list-group contentWrapper">
           <li class="group" v-for="group in topLists" :key="group.GroupID">
             <div class="group-title">{{groupTitle(group.GroupName)}}</div>
             <ul class="group-ulbox">
@@ -62,7 +62,8 @@
       hide() {
         this.showFlag = false
         setTimeout(() => {
-          this.$router.go(-1)
+          // this.$router.go(-1)
+          this.$router.push('./recommend')
         }, 300);
       },
       sendRequest(state) {
@@ -125,7 +126,7 @@
       margin-top: 36px
       background: $color-background
       .list-group
-        padding: 6px 0
+        // padding: 6px 0
         .group
           .group-title
             height: 36px

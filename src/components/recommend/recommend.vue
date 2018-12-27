@@ -1,7 +1,7 @@
 <template>
   <div class="recommend">
     <i-scroll class="recommend-scroll" ref="scroll" :data="newsongList">
-      <div>
+      <div class="contentWrapper">
         <div class="slider-wrapper" v-if="sliders.length" ref="sliderWrapper">
           <i-slider>
             <div v-for="(item,i) in sliders" :key="i">

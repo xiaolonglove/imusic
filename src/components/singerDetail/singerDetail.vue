@@ -219,6 +219,7 @@
           color: $color-theme
           border-radius: 100px
           font-size: 0
+          background: rgba(53, 81, 132, 0.2)
           .icon-play
             display: inline-block
             vertical-align: middle

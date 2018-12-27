@@ -1,7 +1,7 @@
 <template>
   <div class="mymusic">
     <i-scroll class="mymusic-scroll" ref="mymusic" :data="data">
-      <div>
+      <div class="contentWrapper">
         <div class="tab-wrapper">
           <router-link tag="div" class="tab-item" to="/mymusiclist" @click.native="selectTab(0)">
             <i class="icon-music-notes"></i>
@@ -36,7 +36,7 @@
         <div class="wrapper musiclistRecommend" v-show="!!discList.length">
           <h1 class="title">
             可能喜欢的歌单
-            <router-link tag="i" class="icon-cheveron-right" to="/musiclist"></router-link>
+            <router-link tag="i" class="icon-cheveron-right" to="/musicCategory"></router-link>
           </h1>
           <ul class="list-ul">
             <li @click="selectMusiclist(item)" v-for="(item,i) in discList" class="item" :key="i">
