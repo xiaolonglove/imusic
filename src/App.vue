@@ -4,13 +4,13 @@
     <div class="container">
       <router-view/>
     </div>
-    <i-footer :songPlay="songPlay"></i-footer>
+    <i-player :songPlay="songPlay"></i-player>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import iHeader from '@/components/header/header'
-  import iFooter from '@/components/footer/footer'
+  import iPlayer from '@/components/player/player'
   export default {
     name: 'App',
     data() {
@@ -29,7 +29,7 @@
     },
     components: {
       iHeader,
-      iFooter,
+      iPlayer
     }
   }
 </script>
