@@ -18,6 +18,17 @@
             <span class="dot" :class="{'active':currentShow==='cd'}"></span>
             <span class="dot" :class="{'active':currentShow==='lyric'}"></span>
           </div>
+          <div class="operators1-wrapper">
+            <div class="icon i-left">
+              <i :class="currentModeicon" @click.stop="changeMode"></i>
+            </div>
+            <div class="icon i-center">
+              <i class="icon-heart"></i>
+            </div>
+            <div class="icon i-right">
+              <i class="icon-playlist" @click.stop="showPlaylist"></i>
+            </div>
+          </div>
           <div class="progress-wrapper">
             <span class="time time-l">{{format(currentTime)}}</span>
             <div class="progress-bar-wrapper">
@@ -25,22 +36,17 @@
             </div>
             <span class="time time-r">{{format(songPlay.duration)}}</span>
           </div>
-          <div class="operators">
-            <div class="icon i-left" @click="changeMode">
-              <i :class="currentIconmode"></i>
-            </div>
+          <div class="operators2-wrapper">
             <div class="icon i-left" :class="disableCls">
-              <i @click="prev" class="icon-backward-step"></i>
+              <i @click.stop="prev" class="icon-backward-step"></i>
             </div>
             <div class="icon i-center" :class="disableCls">
-              <i @click="togglePlaying" :class="playIcon"></i>
+              <i @click.stop="togglePlaying" :class="playIcon"></i>
             </div>
             <div class="icon i-right" :class="disableCls">
-              <i @click="next" class="icon-forward-step"></i>
+              <i @click.stop="next" class="icon-forward-step"></i>
             </div>
-            <div class="icon i-right">
-              <i class="icon-playlist1"></i>
-            </div>
+            
           </div>
         </div>
       </div>
@@ -59,7 +65,7 @@
         </div>
         <div class="miniPlayer-right">
           <i @click.stop="togglePlay" :class="{'icon-play-outline': !isPlay, 'icon-pause-outline': !!isPlay}"></i>
-          <i class="icon-playlist1" @click.stop="showPlaylist"></i>
+          <i class="icon-playlist" @click.stop="showPlaylist"></i>
         </div>
       </div>
     </transition>
@@ -89,7 +95,7 @@
         isPlay: false,
         currentShow: 'cd',
         currentTime: 0,
-        currentIconmode: 'icon-repost'
+        currentMode: 1,
       }
     },
     computed: {
@@ -102,6 +108,23 @@
       disableCls() {
         return this.songReady ? '' : 'disable'
       },
+      currentModeicon() {
+        let icon = 'icon-reload'
+        switch (this.currentMode) {
+          case 1:
+            icon = 'icon-reload'
+            break;
+          case 2:
+            icon = 'icon-shuffle'
+            break;
+          case 3:
+            icon = 'icon-loop1'
+            break;
+          default:
+            break;
+        }
+        return icon
+      }
     },
     methods: {
       toggleFull() {
@@ -127,7 +150,19 @@
         }
       },
       changeMode() {
-
+        switch (this.currentMode) {
+          case 1:
+            this.currentMode = 2
+            break;
+          case 2:
+            this.currentMode = 3
+            break;
+          case 3:
+            this.currentMode = 1
+            break;
+          default:
+            break;
+        }
       },
       format(interval) {
         interval = interval | 0
@@ -157,7 +192,8 @@
     top: 0
     bottom: 0
     z-index: 110
-    background: $color-background
+    color: #fff
+    background: #676a75
     .background
       position: absolute
       left: 0
@@ -165,7 +201,7 @@
       width: 100%
       height: 100%
       z-index: -1
-      opacity: 0.6
+      opacity: 0.2
       filter: blur(20px)
     .top
       position: fixed;
@@ -204,7 +240,7 @@
       font-size: 0
     .bottom
       position: absolute
-      bottom: 50px
+      bottom: 30px
       width: 100%
       .dot-wrapper
         text-align: center
@@ -216,19 +252,18 @@
           width: 8px
           height: 8px
           border-radius: 50%
-          background: $color-text-l
+          background: #e4d6d6
           &.active
             width: 20px
             border-radius: 5px
-            background: $color-text-ll
+            background: #fff
       .progress-wrapper
         display: flex
         align-items: center
         width: 80%
         margin: 0px auto
-        padding: 10px 0
         .time
-          color: $color-text
+          color: #e4d6d6
           font-size: $font-size-small
           flex: 0 0 30px
           line-height: 30px
@@ -238,10 +273,11 @@
           &.time-r
             text-align: right
         .progress-bar-wrapper
-          flex: 1
-      .operators
+          flex: 1 
+      .operators1-wrapper, .operators2-wrapper
         display: flex
         align-items: center
+        padding: 30px 0 6px
         .icon
           flex: 1
           color: $color-theme
@@ -249,20 +285,37 @@
             color: $color-theme-d
           i
             font-size: 30px
-          &:last-child
-            i
-              font-size: 22px
         .i-left
           text-align: right
         .i-center
-          padding: 0 20px
+          padding: 0 18px
           text-align: center
-          i
-            font-size: 40px
         .i-right
           text-align: left
         .icon-favorite
           color: $color-sub-theme
+      .operators1-wrapper
+        .icon
+          i
+            color: #fff
+            font-size: 20px
+          .icon-playlist
+            font-size: 18px
+      .operators2-wrapper
+        .i-center
+          i
+            font-size: 42px
+      // .operators2-wrapper
+      //   .i-center
+      //     i
+      //       display: inline-block;
+      //       width: 42px
+      //       height: 42px
+      //       border: 1px solid;
+      //       border-radius: 50%;
+      //       &:before
+      //         position: relative;
+      //         left: 3px;
     &.fullPlayer-enter-active, &.fullPlayer-leave-active
       transition: all 0.4s
       .top, .bottom

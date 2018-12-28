@@ -13,7 +13,7 @@
         </div>
         <div class="tab-wrapper">
           <router-link tag="div" class="tab-item" to="/musicCategory">
-            <i class="icon-playlist"></i>
+            <i class="icon-playlist1"></i>
             <span>歌单</span>
           </router-link>
           <router-link tag="div" class="tab-item" to="/singer">
