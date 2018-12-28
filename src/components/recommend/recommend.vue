@@ -12,7 +12,7 @@
           </i-slider>
         </div>
         <div class="tab-wrapper">
-          <router-link tag="div" class="tab-item" to="/musicCategory">
+          <router-link tag="div" class="tab-item" to="/disc">
             <i class="icon-playlist1"></i>
             <span>歌单</span>
           </router-link>
@@ -30,10 +30,10 @@
           </router-link>
         </div>
         <i-split />
-        <div class="wrapper musicCategory">
+        <div class="wrapper disc">
           <h1 class="title">
             热门歌单推荐
-            <router-link tag="i" class="icon-cheveron-right" to="/musicCategory"></router-link>
+            <router-link tag="i" class="icon-cheveron-right" to="/disc"></router-link>
           </h1>
           <ul class="list-ul">
             <li @click="selectMusiclist(item)" v-for="(item,i) in discList" class="item" :key="i">
@@ -93,7 +93,8 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {getRecommends, getSliders, getDiscList, getRadioList, getNewSongList} from '@/api/recommend'
+  import {getRecommends, getSliders, getRadioList, getNewSongList} from '@/api/recommend'
+  import {getDiscList} from '@/api/disc'
   import iScroll from '@/base/scroll/scroll'
   import iLoading from '@/base/loading/loading'
   import iSplit from '@/base/split/split'
@@ -174,15 +175,21 @@
           if (res.code === ERR_OK) {
             this.sliders = res.data.slider
           }
+        }).catch((err) => {
+          this.sendRequest(0)
         })
       },
       _getDiscList() {
-        getDiscList().then((res) => {
+        const params = {
+          ein: 5
+        }
+        getDiscList(params).then((res) => {
           if (res.code === ERR_OK) {
             this.sendRequest(0)
-            // console.log(res.data);
             this.discList = res.data.list.slice(0,6)
           }
+        }).catch((err) => {
+          this.sendRequest(0)
         })
       },
       _getRadioList() {
@@ -192,6 +199,8 @@
             this.radioLists = data;
             this.radio.data = data[0].radioList;
           }
+        }).catch((err) => {
+          this.sendRequest(0)
         })
       },
       _getNewSongList(i) {
@@ -199,8 +208,8 @@
           this.newsongList = res.new_song.data.song_list || []
           this.newsongTabs = res.new_song.data.type_info || []
         }).catch((err) => {
-          this.newsongList = []
-        });
+          this.sendRequest(0)
+        })
       },
     },
     components: {
@@ -261,7 +270,7 @@
           font-size: $font-size-large-x
         span
           font-weight: 600
-    .musicCategory
+    .disc
       li.item
         display: flex
         flex-direction: column

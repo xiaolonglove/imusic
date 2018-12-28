@@ -1,6 +1,6 @@
 <template>
   <div class="discovery">
-    发现
+    不用看了，没有内容
   </div>
 </template>
 
@@ -10,4 +10,10 @@
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/variable.styl"
+  .discovery
+    height: 100%
+    padding: 0 6px
+    display: flex
+    justify-content: center
+    align-items: center
 </style>

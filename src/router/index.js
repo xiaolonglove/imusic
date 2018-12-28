@@ -8,7 +8,7 @@ import User from '@/components/user/user'
 import Search from '@/components/search/search'
 import Singer from '@/components/singer/singer'
 import SingerDetail from '@/components/singerDetail/singerDetail'
-import MusicCategory from '@/components/musicCategory/musicCategory'
+import Disc from '@/components/disc/disc'
 import Radio from '@/components/radio/radio'
 import Top from '@/components/top/top'
 import NewSong from '@/components/newSong/newSong'
@@ -47,8 +47,8 @@ export default new Router({
           ]
         },
         {
-          path: '/musicCategory',
-          component: MusicCategory
+          path: '/disc',
+          component: Disc
         },
         {
           path: '/radio',

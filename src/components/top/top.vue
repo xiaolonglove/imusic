@@ -76,7 +76,6 @@
           this.topLists = res;
         }).catch((err) => {
           this.sendRequest(0)
-          
         })
       },
       itemlistennum(num) {

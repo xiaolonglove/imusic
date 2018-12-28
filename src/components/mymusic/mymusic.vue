@@ -36,7 +36,7 @@
         <div class="wrapper musiclistRecommend" v-show="!!discList.length">
           <h1 class="title">
             可能喜欢的歌单
-            <router-link tag="i" class="icon-cheveron-right" to="/musicCategory"></router-link>
+            <router-link tag="i" class="icon-cheveron-right" to="/disc"></router-link>
           </h1>
           <ul class="list-ul">
             <li @click="selectMusiclist(item)" v-for="(item,i) in discList" class="item" :key="i">
@@ -93,6 +93,8 @@
             this.sendRequest(0)
             this.discList = res.data.list.slice(0,9)
           }
+        }).catch((err) => {
+          this.sendRequest(0)
         })
       },
       sendRequest(state) {

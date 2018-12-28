@@ -27,7 +27,8 @@
       return {
         singerList: [],
         singer: {},
-        showFlag: true
+        showFlag: true,
+        isLoading: true
       }
     },
     created() {
@@ -50,11 +51,18 @@
           path: `/singer/${singer.id}`
         })
       },
+      sendRequest(state) {
+        this.isLoading = !!state
+      },
       _getSingerList() {
+        this.sendRequest(1)
         getSingerList().then((res) => {
+          this.sendRequest(0)
           if (res.code === ERR_OK) {
             this.singerList = this._normalizeSinger(res.data.list)
           }
+        }).catch((err) => {
+          this.sendRequest(0)
         })
       },
       _normalizeSinger(list) {

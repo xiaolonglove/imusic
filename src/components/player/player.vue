@@ -338,7 +338,7 @@
     font-size: 0
     color: #000
     background: $color-background
-    border-1px($color-background-line)
+    border-1px($color-border)
     position: fixed
     bottom: 0
     left: 0
@@ -350,7 +350,7 @@
     &:after
       top: 0
       bottom: 100%
-      box-shadow: 0 -2px 6px $color-background-line
+      box-shadow: 0 -2px 6px $color-border
     .miniPlayer-left
       flex: 1
       width: 100%

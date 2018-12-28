@@ -111,8 +111,7 @@
           }
         }).catch((err) => {
           this.sendRequest(0)
-          this.songList = []
-        });
+        })
       },
       sendRequest(state) {
         this.$emit('sendRequest', state || 0)

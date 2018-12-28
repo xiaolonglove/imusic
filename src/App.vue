@@ -38,6 +38,8 @@
   #app
     display: flex
     flex-direction: column
+    max-width: 800px
+    margin: 0 auto
     .container
       height: calc(100% - 45px)
 </style>
