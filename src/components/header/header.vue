@@ -13,14 +13,25 @@
       <span class="tab-link border-1px">发现
       </span>
     </router-link>
-    <div class="tab-item">
-      <i class="icon-search"></i>
+    <div class="tab-item tab-search">
+      <i class="icon-search" @click.stop="showSearchHandle"></i>
     </div>
+    <search ref="search"/>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  export default {}
+  import search from '@/components/search/search'
+  export default {
+    methods: {
+      showSearchHandle() {
+        this.$refs.search.show()
+      },
+    },
+    components: {
+      search
+    }
+  }
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
@@ -34,10 +45,10 @@
     font-size: 0
     .tab-item
       flex: 1
-      margin: 0 10px
+      margin: 0 6px
       i,span
         display: inline-block
-        padding: 0 10px
+        padding: 0 12px
         line-height: 45px
         color: $color-text-weak
         font-size: $font-size-medium-x
@@ -47,10 +58,12 @@
       .icon-Search
         font-size: $font-size-g
         color: $color-text-m
-    .tab-item:first-child
-      text-align: left
-      margin: 0
-    .tab-item:last-child
+      i
+        padding: 0 18px
+      &:first-child
+        text-align: left
+        margin: 0
+    .tab-search
       text-align: right
       margin: 0
     .router-link-active
