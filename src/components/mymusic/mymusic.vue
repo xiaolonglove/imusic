@@ -38,7 +38,8 @@
             可能喜欢的歌单
             <router-link tag="i" class="icon-cheveron-right" to="/disc"></router-link>
           </h1>
-          <ul class="list-ul">
+          <disc-list @selectDisclist="selectDisclist" :list="discList" />
+          <!-- <ul class="list-ul">
             <li @click="selectMusiclist(item)" v-for="(item,i) in discList" class="item" :key="i">
               <div class="icon">
                 <img v-lazy="item.imgurl">
@@ -49,7 +50,7 @@
               </div>
               <p class="desc" v-html="item.dissname"></p>
             </li>
-          </ul>
+          </ul> -->
         </div>
       </div>
     </i-scroll>
@@ -63,6 +64,7 @@
   import iScroll from '@/base/scroll/scroll'
   import iLoading from '@/base/loading/loading'
   import iSplit from '@/base/split/split'
+  import discList from '@/base/disclist/disclist'
 
   const ERR_OK = 0
   export default {
@@ -80,8 +82,8 @@
       this._getDiscList()
     },
     methods: {
-      selectMusiclist(item) {
-
+      selectDisclist() {
+        console.log("选择了歌单")
       },
       selectTab(i) {
         this.tabtype = i
@@ -109,7 +111,8 @@
     components: {
       iScroll,
       iSplit,
-      iLoading
+      iLoading,
+      discList
     }
   }
 </script>

@@ -127,10 +127,11 @@
       .list-group
         // padding: 6px 0
         .group
+          padding-bottom: 12px
           .group-title
             height: 36px
             line-height: 36px
-            padding-left: 6px
+            padding: 6px
             font-size: 16px
             font-weight: 600
           .group-ulbox
@@ -187,5 +188,7 @@
                   position: absolute
                   bottom: 3px
                   left: 3px
+                  i
+                    font-size: $font-size-small
               
 </style>

@@ -18,17 +18,7 @@
             <span class="dot" :class="{'active':currentShow==='cd'}"></span>
             <span class="dot" :class="{'active':currentShow==='lyric'}"></span>
           </div>
-          <div class="operators1-wrapper">
-            <div class="icon i-left">
-              <i :class="currentModeicon" @click.stop="changeMode"></i>
-            </div>
-            <div class="icon i-center">
-              <i class="icon-heart"></i>
-            </div>
-            <div class="icon i-right">
-              <i class="icon-playlist" @click.stop="showPlaylist"></i>
-            </div>
-          </div>
+          
           <div class="progress-wrapper">
             <span class="time time-l">{{format(currentTime)}}</span>
             <div class="progress-bar-wrapper">
@@ -36,7 +26,7 @@
             </div>
             <span class="time time-r">{{format(songPlay.duration)}}</span>
           </div>
-          <div class="operators2-wrapper">
+          <div class="operators1-wrapper">
             <div class="icon i-left" :class="disableCls">
               <i @click.stop="prev" class="icon-backward-step"></i>
             </div>
@@ -47,6 +37,20 @@
               <i @click.stop="next" class="icon-forward-step"></i>
             </div>
             
+          </div>
+          <div class="operators2-wrapper">
+            <div class="icon">
+              <i :class="currentModeicon" @click.stop="changeMode"></i>
+            </div>
+            <div class="icon">
+              <i class="icon-heart"></i>
+            </div>
+            <div class="icon">
+              <i class="icon-playlist" @click.stop="showPlaylist"></i>
+            </div>
+            <div class="icon">
+              <i class="icon-dots-horizontal-triple"></i>
+            </div>
           </div>
         </div>
       </div>
@@ -240,7 +244,7 @@
       font-size: 0
     .bottom
       position: absolute
-      bottom: 30px
+      bottom: 0
       width: 100%
       .dot-wrapper
         text-align: center
@@ -277,14 +281,15 @@
       .operators1-wrapper, .operators2-wrapper
         display: flex
         align-items: center
-        padding: 30px 0 6px
+        padding: 24px
         .icon
           flex: 1
           color: $color-theme
+          text-align: center
           &.disable
             color: $color-theme-d
           i
-            font-size: 30px
+            font-size: 36px
         .i-left
           text-align: right
         .i-center
@@ -295,27 +300,17 @@
         .icon-favorite
           color: $color-sub-theme
       .operators1-wrapper
+        padding: 12px 0
+        .i-center
+          i
+            font-size: 48px
+      .operators2-wrapper
         .icon
           i
             color: #fff
             font-size: 20px
           .icon-playlist
             font-size: 18px
-      .operators2-wrapper
-        .i-center
-          i
-            font-size: 42px
-      // .operators2-wrapper
-      //   .i-center
-      //     i
-      //       display: inline-block;
-      //       width: 42px
-      //       height: 42px
-      //       border: 1px solid;
-      //       border-radius: 50%;
-      //       &:before
-      //         position: relative;
-      //         left: 3px;
     &.fullPlayer-enter-active, &.fullPlayer-leave-active
       transition: all 0.4s
       .top, .bottom
