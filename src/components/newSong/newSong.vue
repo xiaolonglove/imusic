@@ -23,7 +23,7 @@
           class="scrollContainer"
           ref="scrollContainer"
         >
-          <i-list @selectmusic="selectmusic" :list="songList" />
+          <song-list @selectmusic="selectmusic" :list="songList" />
         </i-scroll>
       </div>
     </div>
@@ -35,7 +35,7 @@
   import {getNewSongList} from '@/api/recommend'
   import iScroll from '@/base/scroll/scroll'
   import iBack from '@/base/back/back'
-  import iList from '@/base/list/list'
+  import songList from '@/base/songlist/songlist'
 
   const ERR_OK = 0
 
@@ -120,7 +120,7 @@
     components: {
       iBack,
       iScroll,
-      iList
+      songList
     }
   }
 </script>
@@ -160,7 +160,7 @@
         height: 30px
         line-height: 30px
         padding-left: 8px
-        background: #f3f5f7
+        background: $color-background-line
         position: fixed
         z-index: 10
         li.tab

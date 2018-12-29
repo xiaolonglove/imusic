@@ -18,7 +18,7 @@
       </div>
       <i-scroll :data="songs" @scroll="scroll" :listen-scroll="listenScroll" :probe-type="probeType" class="list-wrapper" ref="listWrapper">
         <div class="list">
-          <i-list @selectmusic="selectmusic" :list="songs" />
+          <song-list @selectmusic="selectmusic" :list="songs" />
         </div>
       </i-scroll>
     </div>
@@ -29,7 +29,7 @@
   import {getSingerDetail} from '@/api/singer'
   import {createSong} from '@/common/js/song'
   import iScroll from '@/base/scroll/scroll'
-  import iList from '@/base/list/list'
+  import songList from '@/base/songlist/songlist'
   import {prefixStyle} from '@/common/js/dom'
 
   const RESERVED_HEIGHT = 40
@@ -144,7 +144,7 @@
     },
     components: {
       iScroll,
-      iList
+      songList
     }
   }
 </script>

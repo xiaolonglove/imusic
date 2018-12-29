@@ -19,7 +19,7 @@
           class="scrollContainer"
           v-show="!!songList.length" 
         >
-          <i-list @selectmusic="selectmusic" :list="songList"/>
+          <song-list @selectmusic="selectmusic" :list="songList"/>
         </i-scroll>
       </div>
     </div>
@@ -29,7 +29,7 @@
 <script type="text/ecmascript-6">
   import {getNewSongList} from '@/api/recommend'
   import iScroll from '@/base/scroll/scroll'
-  import iList from '@/base/list/list'
+  import songList from '@/base/songlist/songlist'
   import iNothing from '@/base/nothing/nothing'
 
   const ERR_OK = 0
@@ -107,7 +107,7 @@
     },
     components: {
       iScroll,
-      iList,
+      songList,
       iNothing
     }
   }

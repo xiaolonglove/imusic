@@ -35,19 +35,7 @@
             热门歌单推荐
             <router-link tag="i" class="icon-cheveron-right" to="/disc"></router-link>
           </h1>
-          <ul class="list-ul">
-            <li @click="selectMusiclist(item)" v-for="(item,i) in discList" class="item" :key="i">
-              <div class="icon">
-                <img v-lazy="item.imgurl">
-                <div class="detail">
-                  <!-- <h2 class="name" v-html="item.creator.name"></h2> -->
-                  <i class="icon-headphones"></i>
-                  <span class="listennum">{{itemlistennum(item.listennum)}}</span>
-                </div>
-              </div>
-              <p class="desc" v-html="item.dissname"></p>
-            </li>
-          </ul>
+          <disc-list @selectDisclist="selectDisclist" :list="discList" />
         </div>
         <i-split />
         <div class="wrapper radio">
@@ -99,6 +87,7 @@
   import iLoading from '@/base/loading/loading'
   import iSplit from '@/base/split/split'
   import iSlider from '@/base/slider/slider'
+  import discList from '@/base/disclist/disclist'
 
   const ERR_OK = 0
   export default {
@@ -136,6 +125,9 @@
           this.$refs.scroll.refresh()
         }
       },
+      selectDisclist() {
+        console.log("选择了歌单")
+      },
       selectBroadcasting(item) {
         // this.$router.push({
         //   path: `/recommend/${item.dissid}`
@@ -146,12 +138,6 @@
         num += ""
         const len = num.length
         return (len > 4)? num.slice(0, len-4) + "万": num
-      },
-      clickSinger() {
-        // this.$router.push({
-        //   path: `/singer`
-        // })
-        this.$refs.singerRef.show();
       },
       newsongItemImg(mid) {
         const url = 'https://y.gtimg.cn/music/photo_new/T002R90x90M000'+ mid +'.jpg?max_age=2592000'
@@ -217,6 +203,7 @@
       iSplit,
       iLoading,
       iSlider,
+      discList
     }
   }
 </script>
@@ -270,46 +257,46 @@
           font-size: $font-size-large-x
         span
           font-weight: 600
-    .disc
-      li.item
-        display: flex
-        flex-direction: column
-        box-sizing: border-box
-        width: 33.33%
-        float: left
-        padding: 6px
-        .icon
-          width: 100%
-          position: relative
-          img
-            width: 100%
-            border-radius: 5px
-          .name
-            position: absolute
-            bottom: 2px
-            left: 2px
-            width: calc(100% - 2px)
-            height: 14px
-            line-height: 14px
-            border-bottom-right-radius: 6px
-            border-bottom-left-radius: 6px
-            overflow: hidden
-            background: rgba(0,0,0,.5)
-            color: #fff
-          .detail
-            color: #fff
-            font-size: $font-size-small-s
-            display: inline-block
-            position: absolute
-            bottom: 3px
-            left: 3px
-        .desc
-          height: 30px;
-          line-height: 15px
-          padding-top: 5px
-          overflow: hidden
-          font-size: $font-size-small
-          color: $color
+    // .disc
+    //   li.item
+    //     display: flex
+    //     flex-direction: column
+    //     box-sizing: border-box
+    //     width: 33.33%
+    //     float: left
+    //     padding: 6px
+    //     .icon
+    //       width: 100%
+    //       position: relative
+    //       img
+    //         width: 100%
+    //         border-radius: 5px
+    //       .name
+    //         position: absolute
+    //         bottom: 2px
+    //         left: 2px
+    //         width: calc(100% - 2px)
+    //         height: 14px
+    //         line-height: 14px
+    //         border-bottom-right-radius: 6px
+    //         border-bottom-left-radius: 6px
+    //         overflow: hidden
+    //         background: rgba(0,0,0,.5)
+    //         color: #fff
+    //       .detail
+    //         color: #fff
+    //         font-size: $font-size-small-s
+    //         display: inline-block
+    //         position: absolute
+    //         bottom: 3px
+    //         left: 3px
+    //     .desc
+    //       height: 30px;
+    //       line-height: 15px
+    //       padding-top: 5px
+    //       overflow: hidden
+    //       font-size: $font-size-small
+    //       color: $color
     .radio
       .container
         display: inline-block

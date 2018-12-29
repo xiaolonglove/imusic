@@ -1,5 +1,5 @@
 <template>
-  <ul class="list-content contentWrapper">
+  <ul class="list-ul contentWrapper">
     <li class="item" v-for="(item,i) in list"  @click="selectmusic(item)" :key="i">
       <div class="icon">
         <p class="name" v-html="newsongName(item.name, item.subtitle)"></p>
@@ -12,7 +12,7 @@
 
 <script type="text/ecmascript-6">
   export default {
-    name: 'list',
+    name: 'songlist',
     props: {
       list: {
         type: Array,
@@ -45,7 +45,7 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/variable.styl"
   @import "../../common/stylus/mixin.styl"
-  .list-content
+  .list-ul
     display: inline-block
     width: 100%
     li.item

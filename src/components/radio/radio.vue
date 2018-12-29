@@ -32,7 +32,7 @@
           <ul class="list-content contentWrapper">
             <li class="item" v-for="(item,i) in radios" :key="i">
               <div class="icon">
-                <img v-lazy="item.radioImg">
+                <img v-lazy="item.radioImg" :key="item.radioImg">
                 <span class="listennum">{{itemlistennum(item.listenNum)}}</span>
                 <p class="desc" v-html="item.radioName"></p>
               </div>
@@ -154,6 +154,7 @@
     bottom: 0
     width: 100%
     z-index: 10
+    background: $color-background
     transition: all 0.2s linear
     -webkit-transition: all 0.2s linear
     .back-wrapper
@@ -196,33 +197,43 @@
               color: $color-theme
       .scrollContainer
         width: 100%
-        margin-top: 30px
+        margin-top: 36px
+        padding: 6px
+        padding-top: 12px
+        overflow: hidden
         .list-content
-          display: inline-block
           width: 100%
-          padding-top: 6px
-          // text-align: center
           li.item
             box-sizing: border-box
             flex-shrink: 0
-            padding: 6px
-            width: 92px
-            height 92px
+            padding: 12px
+            width: 25%
             display: inline-block
             position: relative
+            margin-bottom: 18px
             .icon
               width: 100%
+              padding-top: 100%
+              position: relative
               img
                 width: 100%
                 border-radius: 50%
+                position: absolute
+                left: 0
+                top: 0
               .desc
+                position: absolute
+                bottom: -24px
+                left: 50%
+                transform: translateX(-50%)
+                width: 100%
+                padding: 6px
                 text-align: center
-                padding: 5px 0
                 overflow: hidden
                 white-space: nowrap
               .listennum
                 position: absolute
-                bottom: 15px
+                bottom: 6px
                 color: $color-background
                 left: 50%
                 transform: translateX(-50%)

@@ -15,6 +15,20 @@ Vue.use(VueLazyload, {
   loading: require('../static/default.png')
 })
 
+//注册全局指令-阻止多次点击
+Vue.directive('preventRepeatClick', {
+  inserted (el, binding) {
+    el.addEventListener('click', () => {
+      if (!el.disabled) {
+        el.disabled = true
+        setTimeout(() => {
+          el.disabled = false
+        }, binding.value || 3000)
+      }
+    })
+  }
+})
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
