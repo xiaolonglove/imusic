@@ -18,7 +18,7 @@
       </div>
       <i-scroll :data="songs" @scroll="scroll" :listen-scroll="listenScroll" :probe-type="probeType" class="list-wrapper" ref="listWrapper">
         <div class="list">
-          <song-list @selectmusic="selectmusic" :list="songs" />
+          <song-list @selectSong="selectSong" :list="songs" />
         </div>
       </i-scroll>
     </div>
@@ -27,10 +27,12 @@
 
 <script type="text/ecmascript-6">
   import {getSingerDetail} from '@/api/singer'
+  import {processSongsUrl} from '@/api/song'
   import {createSong} from '@/common/js/song'
   import iScroll from '@/base/scroll/scroll'
   import songList from '@/base/songlist/songlist'
   import {prefixStyle} from '@/common/js/dom'
+  import Bus from '@/common/js/bus'
 
   const RESERVED_HEIGHT = 40
   const transform = prefixStyle('transform')
@@ -83,8 +85,9 @@
       scroll(pos) {
         this.scrollY = pos.y
       },
-      selectmusic(item) {
-        console.log(item)
+      selectSong(item) {
+        // console.log(item)
+        Bus.$emit('selectSong', item)
       },
       _getDetail() {
         if (!this.singer.id) {
@@ -93,19 +96,18 @@
         }
         getSingerDetail(this.singer.id).then((res) => {
           if (res.code === ERR_OK) {
-            this.songs = this._normalizeSongs(res.data.list)
+            let ret = []
+            res.data.list.forEach((item) => {
+              let {musicData} = item
+              if (musicData.songid && musicData.albummid) {
+                ret.push(createSong(musicData))
+              }
+            })
+            processSongsUrl(ret).then((songs) => {
+              this.songs = songs;
+            });
           }
         })
-      },
-      _normalizeSongs(list) {
-        let ret = []
-        list.forEach((item) => {
-          let {musicData} = item
-          if (musicData.songid && musicData.albummid) {
-            ret.push(createSong(musicData))
-          }
-        })
-        return ret
       }
     },
     watch: {

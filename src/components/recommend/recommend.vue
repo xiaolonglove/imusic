@@ -257,46 +257,6 @@
           font-size: $font-size-large-x
         span
           font-weight: 600
-    // .disc
-    //   li.item
-    //     display: flex
-    //     flex-direction: column
-    //     box-sizing: border-box
-    //     width: 33.33%
-    //     float: left
-    //     padding: 6px
-    //     .icon
-    //       width: 100%
-    //       position: relative
-    //       img
-    //         width: 100%
-    //         border-radius: 5px
-    //       .name
-    //         position: absolute
-    //         bottom: 2px
-    //         left: 2px
-    //         width: calc(100% - 2px)
-    //         height: 14px
-    //         line-height: 14px
-    //         border-bottom-right-radius: 6px
-    //         border-bottom-left-radius: 6px
-    //         overflow: hidden
-    //         background: rgba(0,0,0,.5)
-    //         color: #fff
-    //       .detail
-    //         color: #fff
-    //         font-size: $font-size-small-s
-    //         display: inline-block
-    //         position: absolute
-    //         bottom: 3px
-    //         left: 3px
-    //     .desc
-    //       height: 30px;
-    //       line-height: 15px
-    //       padding-top: 5px
-    //       overflow: hidden
-    //       font-size: $font-size-small
-    //       color: $color
     .radio
       .container
         display: inline-block

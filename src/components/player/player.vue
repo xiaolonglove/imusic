@@ -1,14 +1,14 @@
 <template>
   <div class="player">
     <transition name="fullPlayer">
-      <div class="fullPlayer" v-show="!!fullScreen">
+      <div class="fullPlayer" v-if="!!currentSong" v-show="!!fullScreen">
         <div class="background">
-          <img width="100%" height="100%" v-if="!!songPlay" :src="songPlay.image">
+          <img width="100%" height="100%" v-if="!!currentSong" :src="currentSong.image">
         </div>
         <div class="top" @click="toggleFull">
           <i class="icon-cheveron-down"></i>
-          <span class="name">{{songPlay.name||''}}</span>
-          <div class="singer" @click.stop="1">{{ ('‒ '+songPlay.singer + ' ‒') ||''}}</div>
+          <span class="name">{{currentSong.name||''}}</span>
+          <div class="singer" @click.stop="1">{{ ('‒ '+currentSong.singer + ' ‒') ||''}}</div>
         </div>
         <div class="middle">
 
@@ -24,7 +24,7 @@
             <div class="progress-bar-wrapper">
               <!-- <progress-bar :percent="percent" @percentChange="onProgressBarChange"></progress-bar> -->
             </div>
-            <span class="time time-r">{{format(songPlay.duration)}}</span>
+            <span class="time time-r">{{format(currentSong.duration)}}</span>
           </div>
           <div class="operators1-wrapper">
             <div class="icon i-left" :class="disableCls">
@@ -57,49 +57,49 @@
     </transition>
     <transition name="miniPlayer">
       <div class="miniPlayer border-1px" v-show="!fullScreen" @click="toggleFull">
+        <div ref="miniPlayerProgress" class="miniPlayer-Progress"></div>
         <div class="miniPlayer-left">
-          <div class="nothing" v-if="!songPlay">音乐 让生活充满快乐</div>
-          <div class="content" v-if="!!songPlay">
-            <img :class="{'animate-scan': isPlay}" v-lazy="songPlay.image">
+          <div class="nothing" v-if="!currentSong">音乐 让生活充满快乐</div>
+          <div class="content" v-if="!!currentSong">
+            <img :class="{'animate-scan': playing}" v-lazy="currentSong.image">
             <div class="text">
-              <span class="singer">{{songPlay.singer}}</span>
-              <span class="name">{{songPlay.name}}</span>
+              <span class="name">{{currentSong.name}}</span>
+              <span class="singer">{{currentSong.singer}}</span>
             </div>
           </div>
         </div>
         <div class="miniPlayer-right">
-          <i @click.stop="togglePlay" :class="{'icon-play-outline': !isPlay, 'icon-pause-outline': !!isPlay}"></i>
+          <i @click.stop="togglePlaying" :class="{'icon-play-outline': !playing, 'icon-pause-outline': !!playing}"></i>
           <i class="icon-playlist" @click.stop="showPlaylist"></i>
         </div>
       </div>
     </transition>
+    <audio ref="audio" :src="!!currentSong && currentSong.url" @play="ready" @error="error" @timeupdate="updateTime"
+           @ended="end"></audio>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import {playMode} from '@/common/js/config'
+  import Bus from '@/common/js/bus'
+  // import {saveSearch, clearSearch, deleteSearch, savePlay, saveFavorite, deleteFavorite} from '@/common/js/cache'
+
   export default {
     props: {
-      songPlay: {
-        type: Object,
-        default: null
-      },
-      // fullScreen: {
-      //   type: Boolean,
-      //   default: false
-      // },
-      // isPlay: {
-      //   type: Boolean,
-      //   default: false
-      // }
     },
     data() {
       return {
-        songReady: false,
+        songReady: true,
         fullScreen: false,
-        isPlay: false,
+        playing: false,
+        currentSong: null,
+        currentIndex: 0,
+        currentLyric: null,
         currentShow: 'cd',
         currentTime: 0,
         currentMode: 1,
+
+        mode: playMode.sequence
       }
     },
     computed: {
@@ -130,6 +130,43 @@
         return icon
       }
     },
+    watch: {
+      currentSong(newSong, oldSong) {
+        const self = this;
+        if (!newSong.id) {
+          return
+        }
+        if (newSong.id === (oldSong && oldSong.id)) {
+          return
+        }
+        // if (this.currentLyric) {
+        //   this.currentLyric.stop()
+        //   this.currentTime = 0
+        //   this.playingLyric = ''
+        //   this.currentLineNum = 0
+        // }
+        clearTimeout(this.timer)
+        this.timer = setTimeout(() => {
+          self.$refs.audio.play()
+          // self.getLyric()
+        }, 1000)
+      },
+      playing(newPlaying) {
+        const audio = this.$refs.audio
+        this.$nextTick(() => {
+          newPlaying ? audio.play() : audio.pause()
+        })
+      }
+    },
+    mounted:function(){
+      const self = this;
+      //监听选择歌曲事件
+      Bus.$on('selectSong', function(song){
+        // console.log(song);
+        self.currentSong = song
+        self.playing = true
+      })
+    },
     methods: {
       toggleFull() {
         this.fullScreen = !this.fullScreen
@@ -137,21 +174,70 @@
       showPlaylist() {
         console.log('打开播放列表');
       },
+      togglePlaying() {
+        if (!this.songReady) {
+          return
+        }
+        this.playing = !this.playing
+      },
       prev() {
         if (!this.songReady) {
           return
         }
       },
-      togglePlaying() {
-        if (!this.songReady) {
-          return
-        }
-        this.isPlay = !this.isPlay
-      },
       next() {
         if (!this.songReady) {
           return
         }
+        if (this.playlist.length === 1) {
+          this.loop()
+          return
+        } else {
+          let index = this.currentIndex + 1
+          if (index === this.playlist.length) {
+            index = 0
+          }
+          this.currentIndex  = index
+          if (!this.playing) {
+            this.togglePlaying()
+          }
+        }
+        this.songReady = false
+      },
+      ready() {
+        this.songReady = true
+        // this.savePlayHistory(this.currentSong)
+      },
+      savePlayHistory(song) {
+        console.log(savePlay(song))
+      },
+      error() {
+        this.songReady = true
+      },
+      updateTime(e) {
+        const currentTime = e.target.currentTime
+        this.currentTime = currentTime
+        this.setMiniPlayerProgress(currentTime)
+      },
+      end() {
+        if (this.mode === playMode.loop) {
+          this.loop()
+        } else {
+          this.next()
+        }
+      },
+      loop() {
+        this.$refs.audio.currentTime = 0
+        this.$refs.audio.play()
+        this.playing = true
+        // if (this.currentLyric) {
+        //   this.currentLyric.seek(0)
+        // }
+      },
+      setMiniPlayerProgress(time) {
+        const rate = (parseFloat(time) / parseFloat(this.currentSong.duration) * 100)
+        const $miniPlayerProgress = this.$refs.miniPlayerProgress
+        $miniPlayerProgress && ($miniPlayerProgress.style.width = rate+ '%')
       },
       changeMode() {
         switch (this.currentMode) {
@@ -346,6 +432,14 @@
       top: 0
       bottom: 100%
       box-shadow: 0 -2px 6px $color-border
+    .miniPlayer-Progress
+      display: block
+      position: absolute
+      left: 0
+      top: 0
+      width: 0
+      border-top: 2px solid $color-theme
+      content: ' '
     .miniPlayer-left
       flex: 1
       width: 100%
@@ -371,7 +465,7 @@
           padding-left: 40px
           span
             font-size: $font-size-medium
-            &.name
+            &.singer
               color: $color-text-weak
               font-size: $font-size-small
               padding-top: 2px

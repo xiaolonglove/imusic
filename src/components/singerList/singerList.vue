@@ -246,9 +246,9 @@
       font-size: $font-size-large
       font-weight: 600
       border-radius: 50%
-      box-shadow: 2px 2px 12px $color-text-m
-      color: $color-background-l
-      background: $color-theme
+      box-shadow: 2px 2px 12px $color-text-weak
+      color: $color-theme
+      background: 'transparent'
     .loading-container
       position: absolute
       width: 100%

@@ -1,11 +1,11 @@
 <template>
   <ul class="list-ul contentWrapper">
-    <li class="item" v-for="(item,i) in list"  @click="selectmusic(item)" :key="i">
-      <div class="icon">
+    <li class="item" v-for="(item,i) in list" :key="i">
+      <div class="icon" @click="selectSong(item)">
         <p class="name" v-html="newsongName(item.name, item.subtitle)"></p>
         <p class="desc" v-html="newsongSingerName(item.singer)"></p>
       </div>
-      <i class="icon-dots-horizontal-triple"></i>
+      <i class="icon-dots-horizontal-triple"  @click.stop="more()"></i>
     </li>
   </ul>
 </template>
@@ -20,8 +20,11 @@
       },
     },
     methods: {
-      selectmusic(item) {
-        this.$emit("selectmusic", item)
+      selectSong(item) {
+        this.$emit("selectSong", item)
+      },
+      more() {
+        // this.$emit("more")
       },
       newsongName(name, subtitle) {
         return !!subtitle? name + " " + subtitle: name
