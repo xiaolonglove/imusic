@@ -30,7 +30,7 @@ export function getUid() {
 }
 
 export function getLyric(mid) {
-  const url = '/api/lyric'
+  const url = '/api/getLyric'
   const params = {
     g_tk: 1928093487,
     inCharset: 'utf-8',

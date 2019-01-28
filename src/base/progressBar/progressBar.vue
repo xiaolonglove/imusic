@@ -14,7 +14,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {prefixStyle} from 'common/js/dom'
+  import {prefixStyle} from '@/common/js/dom'
 
   const progressBtnWidth = 16
   const transform = prefixStyle('transform')
@@ -78,7 +78,7 @@
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
-  @import "~common/stylus/variable"
+  @import "../../common/stylus/variable"
 
   .progress-bar
     height: 30px
@@ -86,7 +86,7 @@
       position: relative
       top: 13px
       height: 4px
-      background: rgba(0, 0, 0, 0.3)
+      background: rgba(255, 255, 255, .2)
       .progress
         position: absolute
         height: 100%
@@ -104,7 +104,6 @@
           box-sizing: border-box
           width: 16px
           height: 16px
-          border: 3px solid $color-text
           border-radius: 50%
           background: $color-theme
 </style>
