@@ -85,9 +85,9 @@
       scroll(pos) {
         this.scrollY = pos.y
       },
-      selectSong(item) {
+      selectSong(item, i) {
         // console.log(item)
-        Bus.$emit('selectSong', item)
+        Bus.$emit('selectSong', this.songs, i)
       },
       _getDetail() {
         if (!this.singer.id) {

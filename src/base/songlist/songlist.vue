@@ -1,7 +1,7 @@
 <template>
   <ul class="list-ul contentWrapper">
     <li class="item" v-for="(item,i) in list" :key="i">
-      <div class="icon" @click="selectSong(item)">
+      <div class="icon" @click="selectSong(item, i)">
         <p class="name" v-html="newsongName(item.name, item.subtitle)"></p>
         <p class="desc" v-html="newsongSingerName(item.singer)"></p>
       </div>
@@ -20,8 +20,8 @@
       },
     },
     methods: {
-      selectSong(item) {
-        this.$emit("selectSong", item)
+      selectSong(item, i) {
+        this.$emit("selectSong", item, i)
       },
       more() {
         // this.$emit("more")
@@ -77,7 +77,10 @@
           border-bottom-right-radius: 6px
           border-bottom-left-radius: 6px
           color: $color
+          font-size: $font-size-medium
           font-weight: 600
+          &.active
+            color: $color-theme
         .desc
           padding: 3px 0
           color: $color-text-weak

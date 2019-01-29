@@ -96,6 +96,7 @@
         </div>
       </div>
     </transition>
+    <play-list :playList="playList" ref="playList" />
     <audio ref="audio" :src="!!currentSong && currentSong.url" @play="ready" @error="error" @timeupdate="updateTime"
            @ended="end"></audio>
   </div>
@@ -109,6 +110,7 @@
   import iScroll from '@/base/scroll/scroll'
   // import {saveSearch, clearSearch, deleteSearch, savePlay, saveFavorite, deleteFavorite} from '@/common/js/cache'
   import ProgressBar from '@/base/progressBar/progressBar'
+  import playList from '@/components/playList/playList'
 
   const transform = prefixStyle('transform')
   const transitionDuration = prefixStyle('transitionDuration')
@@ -121,6 +123,7 @@
         songReady: false,
         fullScreen: false,
         playing: false,
+        playList: [],
         currentSong: null,
         currentIndex: 0,
         currentLyric: null,
@@ -195,9 +198,10 @@
     mounted(){
       const self = this;
       //监听选择歌曲事件
-      Bus.$on('selectSong', function(song){
+      Bus.$on('selectSong', function(list, i){
         // console.log(song);
-        self.currentSong = song
+        self.playList = list
+        self.currentSong = list[i]
         self.playing = true
       })
     },
@@ -210,7 +214,7 @@
         this.fullScreen = !this.fullScreen
       },
       showPlaylist() {
-        console.log('打开播放列表');
+        this.$refs.playList.show()
       },
       togglePlaying() {
         if (!this.songReady) return
@@ -398,6 +402,7 @@
     components: {
       iScroll,
       ProgressBar,
+      playList,
     }
   }
 </script>
