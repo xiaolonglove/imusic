@@ -1,5 +1,5 @@
 <template>
-  <ul class="list-ul contentWrapper">
+  <ul class="list-ul contentWrapper baseline">
     <li @click="selectDisclist(item)" v-for="(item,i) in list" class="item" :key="i">
       <div class="icon">
         <img v-lazy="item.imgurl" :key="item.imgurl">

@@ -6,7 +6,7 @@
       :class="{'animate-height': showCategory}"
       v-if="showCategory"
     >
-      <ul class="categories-ul contentWrapper">
+      <ul class="categories-ul contentWrapper baseline">
         <li class="categories-li" v-for="(group,i) in tagList" :key="i">
           <div class="group-title">{{group.categoryGroupName}}</div>
           <ul class="group-ul">

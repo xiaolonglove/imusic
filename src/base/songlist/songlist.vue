@@ -1,5 +1,5 @@
 <template>
-  <ul class="list-ul contentWrapper">
+  <ul class="list-ul contentWrapper baseline">
     <li class="item" v-for="(item,i) in list" :key="i">
       <div class="icon" @click="selectSong(item, i)">
         <p class="name" v-html="newsongName(item.name, item.subtitle)"></p>

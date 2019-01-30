@@ -10,6 +10,18 @@ body, html
   font-size: 12px
 .contentWrapper 
   padding-bottom: 52px
+.baseline:before
+    content: "--- 我是有底线的 ---"
+    position: absolute
+    display: inline-block
+    width: 120px
+    bottom: -30px
+    left: 0
+    right: 0
+    margin: 0 auto
+    text-align center
+    font-size: .5rem
+    color: #d6cfcf
 @media (-webkit-min-device-pixel-ratio: 1.5),(min-device-pixel-ratio: 1.5)
   .border-1px
     &::after

@@ -29,7 +29,7 @@
         v-show="radios.length"
         :data="radios"
         class="scrollContainer">
-          <ul class="list-content contentWrapper">
+          <ul class="list-content contentWrapper baseline">
             <li class="item" v-for="(item,i) in radios" :key="i">
               <div class="icon">
                 <img v-lazy="item.radioImg" :key="item.radioImg">

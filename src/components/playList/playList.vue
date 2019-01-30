@@ -2,24 +2,30 @@
    <div class="list-mask" @click="hide" v-show="showFlag && playList.length">
     <transition name="fold">
       <div class="play-list" @click.stop="1" v-show="showFlag && playList.length">
-        <div class="list-header">
+        <div class="list-header border-1px">
           <h1 class="title">播放列表</h1>
           <span class="empty" @click="empty">清空</span>
         </div>
-        <div class="list-content" ref="listContent">
-          <ul>
-            <li class="item" v-for="(item,key) in playList" :key="key" @click="selectItem(item,index)">
-              <i class="current" :class="getCurrentIcon(item)"></i>
-              <span class="text">{{item.name}}</span>
-              <span @click.stop="toggleFavorite(item)" class="like">
-                <!-- <i :class="getFavoriteIcon(item)"></i> -->
-              </span>
-              <span @click.stop="deleteOne(item)" class="delete">
-                <i class="icon-delete"></i>
-              </span>
+        <i-scroll class="list-content" ref="listContent" :data="playList">
+          <ul class="baseline">
+            <li class="item" v-for="(item,i) in playList" :key="i" @click="selectItem(item,i)">
+              <div class="left">
+                {{sort(i+1)}}
+              </div>
+              <div class="right border-1px">
+                <i class="current" :class="getCurrentIcon(item)"></i>
+                <span class="text">{{item.name}}</span>
+                <span @click.stop="toggleFavorite(item)" class="like">
+                  <!-- <i :class="getFavoriteIcon(item)"></i> -->
+                </span>
+                <span @click.stop="deleteOne(item)" class="delete">
+                  <i class="icon-delete"></i>
+                </span>
+              </div>
             </li>
           </ul>
-        </div>
+        </i-scroll>
+        <div @click="hide" class="list-footer border-1px">关闭</div>
       </div>
     </transition>
   </div>
@@ -58,6 +64,10 @@
     methods: {
       show() {
         this.showFlag = true
+        setTimeout(() => {
+          this.$refs.listContent.refresh()
+          // this.scrollToCurrent(this.currentSong)
+        }, 20)
       },
       hide() {
         this.showFlag = false
@@ -82,6 +92,9 @@
         // }
         // this.setCurrentIndex(index)
         // this.setPlayingState(true)
+      },
+      sort(i) {
+        return i<10? '0'+i: i
       },
       getCurrentIcon(item) {
         // if (this.currentSong.id === item.id) {
@@ -116,12 +129,12 @@
       left: 0
       bottom: 0
       width: 100%
+      background: $color-background
       .list-header
         height: 40px
         line-height: 40px
         padding: 0 18px
-        background: #f3f5f7
-        border-bottom: 1px solid rgba(7, 17, 27, 0.1)
+        border-1px($color-border)
         .title
           float: left
           font-size: 14px
@@ -132,49 +145,54 @@
           color: rgb(0, 160, 220)
       .list-content
         min-height: 30px
-        max-height: 376px
-        padding: 0 18px 18px 5px
+        max-height: 374px
+        padding: 6px
+        box-sizing: border-box
         overflow: hidden
         background: #fff
         ul
           position: relative
-        ul:before
-          content: "--- 我是有底线的 ---"
-          position: absolute
-          display: inline-block
-          width: 120px
-          bottom: -30px
-          left: 0
-          right: 0
-          margin: 0 auto
-          text-align center
-          font-size: .5rem
-          color: #d6cfcf
         .item
           position: relative
-          padding: 12px 0
-          box-sizing: border-box
-          text-align: left;
-          border-1px(rgba(7, 17, 27, 0.1))
-          .current
-            flex: 0 0 20px
-            width: 20px
-            font-size: $font-size-small
-            color: $color-theme-d
-          .text
+          padding: 6px 0
+          text-align: left
+          display: flex
+          flex-direction: row
+          .left
+            width: 30px
+            height: 30px
+            line-height: 30px
+            text-align: center
+          .right
             flex: 1
-            no-wrap()
-            font-size: $font-size-medium
-            color: $color-text-d
-          .like
-            extend-click()
-            margin-right: 15px
-            font-size: $font-size-small
-            color: $color-theme
-            .icon-favorite
-              color: $color-sub-theme
-          .delete
-            extend-click()
-            font-size: $font-size-small
-            color: $color-theme
+            border-1px($color-border)
+            .current
+              flex: 0 0 20px
+              width: 20px
+              font-size: $font-size-small
+              color: $color
+            .text
+              flex: 1
+              no-wrap()
+              font-size: $font-size-medium
+              color: $color
+            .like
+              extend-click()
+              margin-right: 15px
+              font-size: $font-size-small
+              color: $color-theme
+            .delete
+              extend-click()
+              font-size: $font-size-small
+              color: $color-theme
+      .list-footer
+        height: 40px
+        line-height: 40px
+        padding: 0 18px
+        text-align: center
+        font-size: $font-size-medium-x
+        border-1px($color-border)
+        &:after
+          top: 0
+          bottom: 100%
 </style>
