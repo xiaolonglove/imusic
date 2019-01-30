@@ -62,7 +62,7 @@
           </div>
           <div class="operators2-wrapper">
             <div class="icon">
-              <i :class="currentModeicon" @click.stop="changeMode"></i>
+              <i :class="currentModeicon" @click.stop="toggleMode"></i>
             </div>
             <div class="icon">
               <i class="icon-heart"></i>
@@ -78,7 +78,7 @@
       </div>
     </transition>
     <transition name="miniPlayer">
-      <div class="miniPlayer border-1px" v-show="!fullScreen" @click="toggleFull">
+      <div class="miniPlayer border-1px" @click="toggleFull">
         <div ref="miniPlayerProgress" class="miniPlayer-Progress"></div>
         <div class="miniPlayer-left">
           <div class="nothing" v-if="!currentSong">音乐 让生活充满快乐</div>
@@ -96,7 +96,7 @@
         </div>
       </div>
     </transition>
-    <play-list :playList="playList" ref="playList" />
+    <play-list :playList="playList" :currentSong="currentSong" @selectSong="selectSong" @empty="emptyPlaylist" ref="playList" />
     <audio ref="audio" :src="!!currentSong && currentSong.url" @play="ready" @error="error" @timeupdate="updateTime"
            @ended="end"></audio>
   </div>
@@ -108,7 +108,6 @@
   import Bus from '@/common/js/bus'
   import {prefixStyle} from '@/common/js/dom'
   import iScroll from '@/base/scroll/scroll'
-  // import {saveSearch, clearSearch, deleteSearch, savePlay, saveFavorite, deleteFavorite} from '@/common/js/cache'
   import ProgressBar from '@/base/progressBar/progressBar'
   import playList from '@/components/playList/playList'
 
@@ -170,7 +169,7 @@
     watch: {
       currentSong(newSong, oldSong) {
         const self = this;
-        if (!newSong.id) {
+        if (!newSong || !newSong.id) {
           return
         }
         if (newSong.id === (oldSong && oldSong.id)) {
@@ -197,7 +196,7 @@
     },
     mounted(){
       const self = this;
-      //监听选择歌曲事件
+      //监听其他列表选择歌曲事件
       Bus.$on('selectSong', function(list, i){
         // console.log(song);
         self.playList = list
@@ -214,7 +213,9 @@
         this.fullScreen = !this.fullScreen
       },
       showPlaylist() {
-        this.$refs.playList.show()
+        if(this.playList && this.playList.length > 0) {
+          this.$refs.playList.show()
+        }
       },
       togglePlaying() {
         if (!this.songReady) return
@@ -229,12 +230,12 @@
       next() {
         if (!this.songReady) return
          
-        if (this.playlist.length === 1) {
+        if (this.playList.length === 1) {
           this.loop()
           return
         } else {
           let index = this.currentIndex + 1
-          if (index === this.playlist.length) {
+          if (index === this.playList.length) {
             index = 0
           }
           this.currentIndex  = index
@@ -248,6 +249,19 @@
         this.songReady = true
         // this.savePlayHistory(this.currentSong)
       },
+      selectSong(song) {
+        this.currentSong = song
+      },
+      emptyPlaylist(state) {
+        if(state) {
+          this.playList = []
+          this.currentSong = null
+          this.playing = false
+          this.songReady = false
+          this.fullScreen = false
+          this.setMiniPlayerProgress(0)
+        }
+      },
       savePlayHistory(song) {
         console.log(savePlay(song))
       },
@@ -255,6 +269,7 @@
         this.songReady = true
       },
       updateTime(e) {
+        if(!this.songReady) return
         const currentTime = e.target.currentTime
         this.currentTime = currentTime
         this.setMiniPlayerProgress(currentTime)
@@ -275,26 +290,30 @@
         }
       },
       setMiniPlayerProgress(time) {
-        const rate = (parseFloat(time) / parseFloat(this.currentSong.duration) * 100)
-        const $miniPlayerProgress = this.$refs.miniPlayerProgress
+        const $miniPlayerProgress = this.$refs.miniPlayerProgress,
+        currentSong = this.currentSong;
+        let rate = 0
+        if(currentSong && currentSong.duration) {
+          rate = (parseFloat(time) / parseFloat(currentSong.duration) * 100)
+        }
         $miniPlayerProgress && ($miniPlayerProgress.style.width = rate+ '%')
       },
-      changeMode() {
+      toggleMode() {
         if (!this.songReady) return
         
-        switch (this.currentMode) {
-          case 1:
-            this.currentMode = 2
-            break;
-          case 2:
-            this.currentMode = 3
-            break;
-          case 3:
-            this.currentMode = 1
-            break;
-          default:
-            break;
-        }
+        // switch (this.currentMode) {
+        //   case 1:
+        //     this.currentMode = 2
+        //     break;
+        //   case 2:
+        //     this.currentMode = 3
+        //     break;
+        //   case 3:
+        //     this.currentMode = 1
+        //     break;
+        //   default:
+        //     break;
+        // }
       },
       middleTouchStart(e) {
         this.touch.initiated = true
@@ -375,6 +394,7 @@
         })
       },
       handleLyric({lineNum, txt}) {
+        if(!this.songReady) return
         this.currentLineNum = lineNum
         if (lineNum > 5) {
           let lineEl = this.$refs.lyricLine[lineNum - 5]
@@ -447,7 +467,7 @@
         font-size: 24px
         text-align: center
       .name
-        font-size: 15px
+        font-size: $font-size-medium-xx
         font-weight: 600
         display: inline-block
       .singer
@@ -585,6 +605,7 @@
       .operators2-wrapper
         .icon
           i
+            padding: 10px
             color: #fff
             font-size: 20px
           .icon-playlist
@@ -674,12 +695,13 @@
       justify-content: center
       i
         flex: 1
-        color: $color-theme
+        height: 100%
+        display: flex
+        align-items: center
+        justify-content: center
+        padding: 0 6px
         font-size: 20px
-        &:nth-child(1)
-          position: relative
-          top: 2px
-        // &:nth-child(2)
+        color: $color-theme
   /* 顺时针旋转 */
   @keyframes rotate1 {
     0% {
