@@ -21,10 +21,11 @@
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
+  @import "./common/stylus/mixin.styl"
   #app
+    max-width()
     display: flex
     flex-direction: column
-    max-width: 800px
     margin: 0 auto
     .container
       height: calc(100% - 45px)

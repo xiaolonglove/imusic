@@ -288,6 +288,7 @@
                 color: $color-background
                 left: 50%
                 transform: translateX(-50%)
+                no-wrap()
             &:before
               content: ""
               display: inline-block

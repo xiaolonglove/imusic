@@ -134,6 +134,7 @@
   .slide-enter, .slide-leave-to
     transform: translate3d(100%, 0, 0)
   .musiclist
+    max-width()
     position: fixed
     top: 0
     bottom: 0

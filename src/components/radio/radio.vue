@@ -16,7 +16,7 @@
           class="tabsContainer"
         >
           <ul class="list-tabs">
-            <li class="tab border-1px" :class="{tabActive: tabType == item.type}"
+            <li class="tab" :class="{tabActive: tabType == item.type}"
             @click="selectTab(item.type)"
             v-for="item in radioLists" :key="item.type"
             >
@@ -149,6 +149,7 @@
   .slide-enter, .slide-leave-to
     transform: translate3d(100%, 0, 0)
   .radio
+    max-width()
     position: fixed
     top: 0
     bottom: 0
@@ -172,32 +173,27 @@
       margin-top: 36px
       background: $color-background
       .tabsContainer
-        width: 100%;
-        height: 30px
-        overflow: hidden;
-        position: fixed;
-        z-index: 10
-        background: #f3f5f7
         .list-tabs
-          display: inline-block
-          height: 30px
-          line-height: 30px
-          padding-left: 8px
-          white-space: nowrap
+          width: 60px
           li.tab
-            display: inline-block
-            box-sizing: border-box
-            flex-shrink: 0
-            width: 36px
-            height: 100%
-            margin: 0 6px
+            width: 100%;
+            height: 50px;
+            line-height: 50px;
             text-align: center
+            position: relative
             &.tabActive
-              border-1px($color-theme)
               color: $color-theme
+              &::after
+                display: block
+                position: absolute
+                left: 0
+                bottom: 0
+                height: 100%
+                border-left: 1px solid $color-theme
+                content: ''
+                color: $color-theme
       .scrollContainer
         width: 100%
-        margin-top: 36px
         padding: 6px
         padding-top: 12px
         overflow: hidden
@@ -207,7 +203,7 @@
             box-sizing: border-box
             flex-shrink: 0
             padding: 12px
-            width: 25%
+            width: 33.3%
             display: inline-block
             position: relative
             margin-bottom: 18px
@@ -237,6 +233,7 @@
                 color: $color-background
                 left: 50%
                 transform: translateX(-50%)
+                no-wrap()
             &:before
               content: ""
               display: inline-block

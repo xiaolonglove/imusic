@@ -92,7 +92,7 @@
         }
       },
       selectSong(item, index) {
-        this.$emit('selectSong', item)
+        this.$emit('selectSong', item, index)
         // if (this.mode === playMode.random) {
         //   index = this.playlist.findIndex((song) => {
         //     return song.id === item.id
@@ -153,30 +153,28 @@
       .list-header
         height: 40px
         line-height: 40px
-        padding: 0 18px
         border-1px($color-border)
         .title
           float: left
+          padding: 0 12px
           font-size: 14px
-          color: rgb(7, 17, 27)
         .empty
           float: right
+          padding: 0 12px
           font-size: 12px
-          color: rgb(0, 160, 220)
+          color: $color-theme
       .list-content
         min-height: 30px
         max-height: 398px
-        // padding: 6px
         box-sizing: border-box
         overflow: hidden
         background: #fff
         ul
           position: relative
         .item
-          position: relative
-          // padding: 6px 0
-          text-align: left
           display: flex
+          position: relative
+          text-align: left
           flex-direction: row
           .left
             width: 45px
@@ -184,9 +182,10 @@
             line-height: 40px
             text-align: center
           .right
-            flex: 1
-            border-1px($color-border)
             display: flex
+            flex: 1
+            width: calc(100% - 40px)
+            border-1px($color-border)
             flex-direction: row
             .icon
               flex: 1
@@ -208,7 +207,6 @@
               height: 40px
               line-height: 40px
               text-align: center
-              margin-right: 6px
               font-size: $font-size-small
           &.active
             .left

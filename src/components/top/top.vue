@@ -96,13 +96,16 @@
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/variable.styl"
+  @import "../../common/stylus/mixin.styl"
+    
   .slide-enter-active, .slide-leave-active
     transition: all 0.3s
   .slide-enter, .slide-leave-to
     transform: translate3d(100%, 0, 0)
   .top
-    left: 0
+    max-width()
     position: fixed
+    left: 0
     top: 0
     bottom: 0
     width: 100%

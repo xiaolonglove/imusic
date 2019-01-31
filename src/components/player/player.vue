@@ -83,7 +83,7 @@
         <div class="miniPlayer-left">
           <div class="nothing" v-if="!currentSong">音乐 让生活充满快乐</div>
           <div class="content" v-if="!!currentSong">
-            <img :class="{'animate-scan': playing}" v-lazy="currentSong.image ||''">
+            <img :class="{'animate-scan': playing}" :src="currentSong.image ||''">
             <div class="text">
               <span class="name">{{currentSong.name ||''}}</span>
               <span class="singer">{{currentSong.singer ||''}}</span>
@@ -92,13 +92,13 @@
         </div>
         <div class="miniPlayer-right">
           <i @click.stop="togglePlaying" :class="{'icon-play-outline': !playing, 'icon-pause-outline': !!playing}"></i>
+          <i class="icon-next" @click.stop="next"></i>
           <i class="icon-playlist" @click.stop="showPlaylist"></i>
         </div>
       </div>
     </transition>
     <play-list :playList="playList" :currentSong="currentSong" @selectSong="selectSong" @empty="emptyPlaylist" ref="playList" />
-    <audio ref="audio" :src="!!currentSong && currentSong.url" @play="ready" @error="error" @timeupdate="updateTime"
-           @ended="end"></audio>
+    <audio ref="audio" :src="!!currentSong && currentSong.url" @play="ready" @error="error" @timeupdate="updateTime" @ended="end"></audio>
   </div>
 </template>
 
@@ -168,6 +168,7 @@
     },
     watch: {
       currentSong(newSong, oldSong) {
+        // console.log(newSong)
         const self = this;
         if (!newSong || !newSong.id) {
           return
@@ -202,6 +203,7 @@
         self.playList = list
         self.currentSong = list[i]
         self.playing = true
+        self.currentIndex = i
       })
     },
     created() {
@@ -226,6 +228,20 @@
       },
       prev() {
         if (!this.songReady) return
+        if (this.playList.length === 1) {
+          this.loop()
+          return
+        } else {
+          let index = this.currentIndex - 1
+          if (index === -1) {
+            index = this.playList.length - 1
+          }
+          this.setCurrentIndex(index)
+          if (!this.playing) {
+            this.togglePlaying()
+          }
+        }
+        this.songReady = false
       },
       next() {
         if (!this.songReady) return
@@ -238,19 +254,35 @@
           if (index === this.playList.length) {
             index = 0
           }
-          this.currentIndex  = index
+          this.setCurrentIndex(index)
           if (!this.playing) {
             this.togglePlaying()
           }
         }
         this.songReady = false
       },
+      end() {
+        if (this.mode === playMode.loop) {
+          this.loop()
+        } else {
+          this.next()
+        }
+      },
+      loop() {
+        this.$refs.audio.currentTime = 0
+        this.$refs.audio.play()
+        this.playing = true
+        if (this.currentLyric) {
+          this.currentLyric.seek(0)
+        }
+      },
       ready() {
         this.songReady = true
         // this.savePlayHistory(this.currentSong)
       },
-      selectSong(song) {
+      selectSong(song, i) {
         this.currentSong = song
+        this.currentIndex = i
       },
       emptyPlaylist(state) {
         if(state) {
@@ -274,20 +306,9 @@
         this.currentTime = currentTime
         this.setMiniPlayerProgress(currentTime)
       },
-      end() {
-        if (this.mode === playMode.loop) {
-          this.loop()
-        } else {
-          this.next()
-        }
-      },
-      loop() {
-        this.$refs.audio.currentTime = 0
-        this.$refs.audio.play()
-        this.playing = true
-        if (this.currentLyric) {
-          this.currentLyric.seek(0)
-        }
+      setCurrentIndex(i) {
+        this.currentIndex = i
+        this.currentSong = this.playList[i]
       },
       setMiniPlayerProgress(time) {
         const $miniPlayerProgress = this.$refs.miniPlayerProgress,
@@ -689,7 +710,6 @@
         padding-left: 6px
         font-size: $font-size-medium
     .miniPlayer-right
-      width: 80px
       display: flex
       align-items: center
       justify-content: center
@@ -702,6 +722,8 @@
         padding: 0 6px
         font-size: 20px
         color: $color-theme
+        &:last-child
+          padding-left: 12px
   /* 顺时针旋转 */
   @keyframes rotate1 {
     0% {
