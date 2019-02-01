@@ -16,7 +16,7 @@
           </li>
         </ul>
         <i-scroll
-          :data="newsongList"
+          :data="songList"
           :listen-scroll="listenScroll"
           :probe-type="probeType"
           v-show="showFlag"
@@ -33,9 +33,11 @@
 
 <script type="text/ecmascript-6">
   import {getNewSongList} from '@/api/recommend'
+  import {processSongsUrl} from '@/api/song'
   import iScroll from '@/base/scroll/scroll'
   import iBack from '@/base/back/back'
   import Bus from '@/common/js/bus'
+  import {createSong} from '@/common/js/song'
   import songList from '@/base/songlist/songlist'
 
   const ERR_OK = 0
@@ -43,10 +45,6 @@
   export default {
     name: 'musiclist',
     props: {
-      newsongList: {
-        type: Array,
-        default: []
-      },
       newsongTabs: {
         type: Array,
         default: []
@@ -54,7 +52,7 @@
     },
     data() {
       return {
-        songList: this.newsongList,
+        songList: [],
         showFlag: true,
         tabType: 0
       }
@@ -62,10 +60,7 @@
     created() {
       this.probeType = 1
       this.listenScroll = true
-      if(!!this.newsongList) {
-        // 父组件没有传值，需要发送请求
-        this._getNewSongList()
-      }
+      this._getNewSongList()
     },
     methods: {
       show() {
@@ -85,7 +80,7 @@
         this._getNewSongList(id)
       },
       selectSong(item, i) {
-        // Bus.$emit('selectSong', this.songList, i)
+        Bus.$emit('selectSong', this.songList, i)
       },
       newsongName(name, subtitle) {
         return !!subtitle? name + " " + subtitle: name
@@ -109,7 +104,21 @@
         getNewSongList(i).then((res) => {
           if (res.code === ERR_OK) {
             this.sendRequest(0)
-            this.songList = res.new_song.data.song_list || []
+            let ret = []
+            res.new_song.data.song_list.forEach((item) => {
+              ret.push(createSong({
+                songid: item.id,
+                songmid: item.mid,
+                singer: item.singer,
+                songname: this.newsongName(item.name, item.subtitle),
+                albumname: item.album.name,
+                interval: item.interval,
+                albummid: item.album.mid
+              }))
+            })
+            processSongsUrl(ret).then((songs) => {
+              this.songList = songs
+            });
           }
         }).catch((err) => {
           this.sendRequest(0)

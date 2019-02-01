@@ -76,7 +76,7 @@
       </div>
     </i-scroll>
     <i-loading v-show="isLoading"></i-loading>
-    <router-view @sendRequest="sendRequest" :newsongList="newsongList" :newsongTabs="newsongTabs" :radioLists="radioLists"></router-view>
+    <router-view @sendRequest="sendRequest" :newsongTabs="newsongTabs" :radioLists="radioLists"></router-view>
   </div>
 </template>
 

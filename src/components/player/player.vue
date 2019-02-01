@@ -199,7 +199,6 @@
       const self = this;
       //监听其他列表选择歌曲事件
       Bus.$on('selectSong', function(list, i){
-        // console.log(song);
         self.playList = list
         self.currentSong = list[i]
         self.playing = true

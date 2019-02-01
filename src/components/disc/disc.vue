@@ -89,8 +89,9 @@
           ein: 29
         })
       },
-      selectDisclist() {
-        console.log("选择了歌单")
+      selectDisclist(item) {
+        // console.log("选择了歌单")
+        console.log(item)
       },
       sendRequest(state) {
         this.$emit('sendRequest', state || 0)

@@ -56,7 +56,7 @@
       flex-direction: row
       box-sizing: border-box
       width: 100%
-      padding: 6px
+      padding: 10px 6px
       border-top: 1px solid $color-background-line;
       .icon
         width: calc(100% - 50px)

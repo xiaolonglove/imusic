@@ -10,7 +10,7 @@
       </div>
       <div class="bg-layer" ref="layer">
         <div class="play-wrapper">
-          <div ref="playBtn" v-show="songs.length>0" class="play"> <!-- @click="random" -->
+          <div ref="playBtn" v-show="songs.length>0"  @click="random" class="play"> <!-- @click="random" -->
             <i class="icon-play"></i>
             <span class="text">播放全部</span>
           </div>
@@ -85,9 +85,15 @@
       scroll(pos) {
         this.scrollY = pos.y
       },
+      random() {
+        this.selectSong({}, 0)
+      },
       selectSong(item, i) {
         // console.log(item)
         Bus.$emit('selectSong', this.songs, i)
+      },
+      newsongName(name, subtitle) {
+        return !!subtitle? name + " " + subtitle: name
       },
       _getDetail() {
         if (!this.singer.id) {
@@ -100,6 +106,7 @@
             res.data.list.forEach((item) => {
               let {musicData} = item
               if (musicData.songid && musicData.albummid) {
+                // musicData.name = this.newsongName(musicData.songname, musicData.albumdesc)
                 ret.push(createSong(musicData))
               }
             })
