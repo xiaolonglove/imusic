@@ -8,22 +8,22 @@
       </div>
       <div class="list-wrapper">
         <ul class="list-tabs" ref="newsongTab">
-          <li ref="newsongItem" class="tab border-1px" :class="{tabActive: tabType == i}"
-          @click="selectTab(i)"
+          <li ref="newsongItem" class="tab border-1px" :class="{tabActive: tabType == item.id}"
+          @click="selectTab(item)"
           v-for="(item,i) in newsongTabs" :key="i"
           >
             {{item.title}}
           </li>
         </ul>
         <i-scroll
-          :data="songList"
+          :data="newsongList"
           :listen-scroll="listenScroll"
           :probe-type="probeType"
           v-show="showFlag"
           class="scrollContainer"
           ref="scrollContainer"
         >
-          <song-list @selectmusic="selectmusic" :list="songList" />
+          <song-list @selectSong="selectSong" :list="songList" />
         </i-scroll>
       </div>
     </div>
@@ -35,6 +35,7 @@
   import {getNewSongList} from '@/api/recommend'
   import iScroll from '@/base/scroll/scroll'
   import iBack from '@/base/back/back'
+  import Bus from '@/common/js/bus'
   import songList from '@/base/songlist/songlist'
 
   const ERR_OK = 0
@@ -77,13 +78,14 @@
           this.$router.push('./recommend')
         }, 300)
       },
-      selectTab(i) {
-        if(this.tabType === i) return false
-        this.tabType = i
-        this._getNewSongList(i)
+      selectTab(item) {
+        const id = item.id;
+        if(this.tabType === id) return false
+        this.tabType = id
+        this._getNewSongList(id)
       },
-      selectmusic(item) {
-        console.log(item);
+      selectSong(item, i) {
+        // Bus.$emit('selectSong', this.songList, i)
       },
       newsongName(name, subtitle) {
         return !!subtitle? name + " " + subtitle: name
@@ -143,6 +145,7 @@
     transition: all 0.2s linear
     -webkit-transition: all 0.2s linear
     .back-wrapper
+      max-width()
       position: fixed
       top: 0
       bottom: 0

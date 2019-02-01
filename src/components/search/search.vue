@@ -80,6 +80,8 @@
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/variable.styl"
+  @import "../../common/stylus/mixin.styl"
+    
   .search-slide-enter-active, .search-slide-leave-active
     transition: all 0.4s
     .back-wrapper
@@ -101,6 +103,7 @@
     background: $color-background
     transition: all 0.2s linear
     .back-wrapper
+      max-width()
       position: fixed
       top: 0
       bottom: 0

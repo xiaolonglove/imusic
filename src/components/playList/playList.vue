@@ -86,9 +86,9 @@
         console.log(song);
       },
       deleteOne(item) {
-        // this.deleteSong(item)
-        if (!this.playlist.length) {
-          this.hide()
+        this.$emit('deleteSong', item)
+        if (!this.playList.length) {
+          // this.hide()
         }
       },
       selectSong(item, index) {

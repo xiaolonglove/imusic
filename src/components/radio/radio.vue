@@ -159,6 +159,7 @@
     transition: all 0.2s linear
     -webkit-transition: all 0.2s linear
     .back-wrapper
+      max-width()
       position: fixed
       top: 0
       bottom: 0

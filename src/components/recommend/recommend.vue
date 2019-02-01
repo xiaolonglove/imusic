@@ -192,7 +192,14 @@
       _getNewSongList(i) {
         getNewSongList(i).then((res) => {
           this.newsongList = res.new_song.data.song_list || []
-          this.newsongTabs = res.new_song.data.type_info || []
+          const type_info = res.new_song.data.type_info
+          type_info.unshift({
+            id: 0,
+            report: "0",
+            title: "推荐"
+          })
+          this.newsongTabs = type_info || []
+
         }).catch((err) => {
           this.sendRequest(0)
         })

@@ -2,9 +2,9 @@
   <div class="player">
     <transition name="fullPlayer">
       <div class="fullPlayer" v-if="!!currentSong" v-show="!!fullScreen">
-        <div class="background">
+        <!-- <div class="background">
           <img width="100%" height="100%" v-if="!!currentSong" :src="currentSong.image">
-        </div>
+        </div> -->
         <div class="top" @click="toggleFull">
           <i class="icon-cheveron-down"></i>
           <span class="name">{{currentSong.name||''}}</span>
@@ -41,6 +41,20 @@
             <span class="dot" :class="{'active':currentShow==='cd'}"></span>
             <span class="dot" :class="{'active':currentShow==='lyric'}"></span>
           </div>
+          <div class="operators1-wrapper">
+            <div class="icon i-left">
+              <i :class="currentModeicon" @click.stop="toggleMode"></i>
+            </div>
+            <div class="icon i-center">
+              <i class="icon-heart"></i>
+            </div>
+            <div class="icon i-right">
+              <i class="icon-playlist" @click.stop="showPlaylist"></i>
+            </div>
+            <!-- <div class="icon">
+              <i class="icon-dots-horizontal-triple"></i>
+            </div> -->
+          </div>
           <div class="progress-wrapper">
             <span class="time time-l">{{format(currentTime)}}</span>
             <div class="progress-bar-wrapper">
@@ -48,7 +62,7 @@
             </div>
             <span class="time time-r">{{format(currentSong.duration ||'')}}</span>
           </div>
-          <div class="operators1-wrapper">
+          <div class="operators2-wrapper">
             <div class="icon i-left" :class="disableCls">
               <i @click.stop="prev" class="icon-backward-step"></i>
             </div>
@@ -59,20 +73,6 @@
               <i @click.stop="next" class="icon-forward-step"></i>
             </div>
             
-          </div>
-          <div class="operators2-wrapper">
-            <div class="icon">
-              <i :class="currentModeicon" @click.stop="toggleMode"></i>
-            </div>
-            <div class="icon">
-              <i class="icon-heart"></i>
-            </div>
-            <div class="icon">
-              <i class="icon-playlist" @click.stop="showPlaylist"></i>
-            </div>
-            <div class="icon">
-              <i class="icon-dots-horizontal-triple"></i>
-            </div>
           </div>
         </div>
       </div>
@@ -97,7 +97,7 @@
         </div>
       </div>
     </transition>
-    <play-list :playList="playList" :currentSong="currentSong" @selectSong="selectSong" @empty="emptyPlaylist" ref="playList" />
+    <play-list :playList="playList" :currentSong="currentSong" @selectSong="selectSong" @deleteSong="deleteSong" @empty="emptyPlaylist" ref="playList" />
     <audio ref="audio" :src="!!currentSong && currentSong.url" @play="ready" @error="error" @timeupdate="updateTime" @ended="end"></audio>
   </div>
 </template>
@@ -284,6 +284,23 @@
         this.currentSong = song
         this.currentIndex = i
       },
+      deleteSong(song){
+        const playList = this.playList,
+        pIndex = this.findIndex(playList, song);
+        let currentIndex = this.currentIndex;
+
+        playList.splice(pIndex, 1)
+        if (currentIndex > pIndex || currentIndex === playList.length) {
+          currentIndex--
+        }
+        this.playList = playList
+        this.currentIndex = currentIndex
+      },
+      findIndex(list, song) {
+        return list.findIndex((item) => {
+          return item.id === song.id
+        })
+      },
       emptyPlaylist(state) {
         if(state) {
           this.playList = []
@@ -458,8 +475,8 @@
     top: 0
     bottom: 0
     z-index: 110
-    color: #fff
-    background: #676a75
+    color: $color
+    background: $color-background
     .background
       position: absolute
       left: 0
@@ -500,8 +517,8 @@
     .middle
       position: fixed
       width: 100%
-      top: 80px
-      bottom: 200px
+      top: 60px
+      bottom: 230px
       white-space: nowrap
       font-size: 0
       .middle-l
@@ -511,6 +528,7 @@
         width: 100%
         height: 0
         padding-top: 80%
+        margin-top: 12px
         .cd-wrapper
           position: absolute
           left: 10%
@@ -543,7 +561,6 @@
             height: 20px
             line-height: 20px
             font-size: $font-size-medium
-            color: $color-background-l
       .middle-r
         display: inline-block
         vertical-align: top
@@ -557,7 +574,7 @@
           text-align: center
           .text
             line-height: 32px
-            color: $color-background-l
+            color: $color
             font-size: $font-size-medium
             &.current
               color: $color-theme
@@ -566,6 +583,7 @@
       bottom: 0
       width: 100%
       .dot-wrapper
+        padding: 18px 0
         text-align: center
         font-size: 0
         .dot
@@ -579,14 +597,14 @@
           &.active
             width: 20px
             border-radius: 5px
-            background: #fff
+            background: $color
       .progress-wrapper
         display: flex
         align-items: center
         width: 80%
         margin: 0px auto
         .time
-          color: #e4d6d6
+          color: $color-text-weak
           font-size: $font-size-small
           flex: 0 0 30px
           line-height: 30px
@@ -600,7 +618,7 @@
       .operators1-wrapper, .operators2-wrapper
         display: flex
         align-items: center
-        padding: 24px
+        padding: 6px
         .icon
           flex: 1
           color: $color-theme
@@ -618,16 +636,16 @@
           text-align: left
         .icon-favorite
           color: $color-sub-theme
-      .operators1-wrapper
-        padding: 12px 0
+      .operators2-wrapper
+        padding: 42px 0
         .i-center
           i
             font-size: 48px
-      .operators2-wrapper
+      .operators1-wrapper
         .icon
           i
             padding: 10px
-            color: #fff
+            color: $color-text-weak
             font-size: 20px
           .icon-playlist
             font-size: 18px

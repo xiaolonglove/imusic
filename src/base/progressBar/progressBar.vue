@@ -86,7 +86,7 @@
       position: relative
       top: 13px
       height: 4px
-      background: rgba(255, 255, 255, .2)
+      background: rgba(226, 226, 226, 0.3)
       .progress
         position: absolute
         height: 100%
@@ -99,11 +99,11 @@
         height: 30px
         .progress-btn
           position: relative
-          top: 7px
-          left: 7px
+          top: 11px
+          left: 2px
           box-sizing: border-box
-          width: 16px
-          height: 16px
+          width: 8px
+          height: 8px
           border-radius: 50%
           background: $color-theme
 </style>

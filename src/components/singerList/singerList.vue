@@ -18,8 +18,8 @@
     </ul>
     <div class="list-shortcut" @touchstart="onShortcutTouchStart" @touchmove.stop.prevent="onShortcutTouchMove" @touchend="onShortcutTouchEnd">
       <ul>
-        <li v-for="(item, i) in shortcutList" :data-index="i" class="item" :class="{'current':currentIndex===i}" :key="i">{{item}}
-
+        <li v-for="(item, i) in shortcutList" :data-index="i" class="item" :class="{'current':currentIndex===i}" :key="i">
+          {{item}}
         </li>
       </ul>
     </div>
@@ -246,9 +246,9 @@
       font-size: $font-size-large
       font-weight: 600
       border-radius: 50%
-      box-shadow: 2px 2px 12px $color-text-weak
+      box-shadow: 2px 2px 12px rgba(224, 215, 215, 0.6)
       color: $color-theme
-      background: 'transparent'
+      background: transparent
     .loading-container
       position: absolute
       width: 100%
