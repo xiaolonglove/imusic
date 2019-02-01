@@ -7,8 +7,9 @@ import MymusicList from '@/components/mymusicList/mymusicList'
 import User from '@/components/user/user'
 import Search from '@/components/search/search'
 import Singer from '@/components/singer/singer'
-import MusicList from '@/components/musicList/musicList'
+import SingerDetail from '@/components/singerDetail/singerDetail'
 import Disc from '@/components/disc/disc'
+import DiscDetail from '@/components/discDetail/discDetail'
 import Radio from '@/components/radio/radio'
 import Top from '@/components/top/top'
 import NewSong from '@/components/newSong/newSong'
@@ -42,13 +43,19 @@ export default new Router({
           children: [
             {
               path: ':id',
-              component: MusicList,
+              component: SingerDetail,
             }
           ]
         },
         {
           path: '/disc',
-          component: Disc
+          component: Disc,
+          children: [
+            {
+              path: ':id',
+              component: DiscDetail
+            }
+          ]
         },
         {
           path: '/radio',

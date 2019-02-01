@@ -1,9 +1,9 @@
 <template>
-  <transition name="slide">
-    <div class="singerDetail" v-show="showFlag">
+  <!-- <transition name="slide"> -->
+    <div class="singerDetail">
       <div class="back-wrapper">
         <i class="icon-cheveron-left" @click="hide"></i>
-        <span class="title">{{singer.name}}</span>
+        <span class="title">{{title}}</span>
       </div>
       <div class="bg-wrapper" :style="bgStyle" ref="bgImage">
         <div class="filter" ref="filter"></div>
@@ -22,13 +22,10 @@
         </div>
       </i-scroll>
     </div>
-  </transition>
+  <!-- </transition> -->
 </template>
 
 <script type="text/ecmascript-6">
-  import {getSingerDetail} from '@/api/singer'
-  import {processSongsUrl} from '@/api/song'
-  import {createSong} from '@/common/js/song'
   import iScroll from '@/base/scroll/scroll'
   import songList from '@/base/songlist/songlist'
   import {prefixStyle} from '@/common/js/dom'
@@ -38,29 +35,27 @@
   const transform = prefixStyle('transform')
   const backdrop = prefixStyle('backdrop-filter')
 
-  const ERR_OK = 0
   export default {
     props: {
-      singer: {
-        type: Object,
-        default: {
-          id: null,
-          avatar: '',
-          name: '',
-        }
+      songs: {
+        type: Array,
+        default: []
+      },
+      title: {
+        type: String,
+        default: ''
+      },
+      bgImage: {
+        type: String,
+        default: ''
       },
     },
     data() {
       return {
-        showFlag: true,
-        songs: [],
         scrollY: 0,
         probeType: 3,
         listenScroll: true
       }
-    },
-    created() {
-      this._getDetail()
     },
     mounted() {
       this.imageHeight = this.$refs.bgImage.clientHeight
@@ -69,18 +64,12 @@
     },
     computed: {
       bgStyle() {
-        return `background-image:url(${this.singer.avatar})`
+        return `background-image:url(${this.bgImage})`
       }
     },
     methods: {
-      show() {
-        this.showFlag = true
-      },
       hide() {
-        this.showFlag = false
-        setTimeout(() => {
-          this.$router.go(-1)
-        }, 300)
+        this.$router.go(-1)
       },
       scroll(pos) {
         this.scrollY = pos.y
@@ -95,27 +84,6 @@
       newsongName(name, subtitle) {
         return !!subtitle? name + " " + subtitle: name
       },
-      _getDetail() {
-        if (!this.singer.id) {
-          this.$router.push('/singer')
-          return
-        }
-        getSingerDetail(this.singer.id).then((res) => {
-          if (res.code === ERR_OK) {
-            let ret = []
-            res.data.list.forEach((item) => {
-              let {musicData} = item
-              if (musicData.songid && musicData.albummid) {
-                // musicData.name = this.newsongName(musicData.songname, musicData.albumdesc)
-                ret.push(createSong(musicData))
-              }
-            })
-            processSongsUrl(ret).then((songs) => {
-              this.songs = songs;
-            });
-          }
-        })
-      }
     },
     watch: {
       scrollY(newVal) {

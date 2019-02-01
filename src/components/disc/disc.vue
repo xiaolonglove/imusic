@@ -24,6 +24,7 @@
           <disc-categories @selectCategories="selectCategories" :tagList="tagList" :showCategory="showCategory"/>
         </i-scroll>
       </div>
+      <router-view :disc="disc"></router-view>
     </div>
   </transition>
 </template>
@@ -49,6 +50,7 @@
     name: 'disc',
     data() {
       return {
+        disc: null,
         showFlag: true,
         isLoading: true,
         showCategory: false,
@@ -90,8 +92,10 @@
         })
       },
       selectDisclist(item) {
-        // console.log("选择了歌单")
-        console.log(item)
+        this.$router.push({
+          path: `/disc/${item.dissid}`
+        })
+        this.disc = item
       },
       sendRequest(state) {
         this.$emit('sendRequest', state || 0)

@@ -1,8 +1,6 @@
 <template>
   <transition name="slide">
-    <div class="radio
-    " v-show="showFlag" ref="radio
-    ">
+    <div class="radio" v-show="showFlag" ref="radio">
       <div class="back-wrapper">
         <i-back :title="'电台'" @hide="hide"></i-back>
       </div>
