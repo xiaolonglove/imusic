@@ -30,7 +30,17 @@ export default new Router({
         {
           path: '/mymusicList',
           component: MymusicList
-        }
+        },
+        {
+          path: '/disc',
+          component: Disc,
+          children: [
+            {
+              path: ':id',
+              component: DiscDetail
+            }
+          ]
+        },
       ]
     },
     {
@@ -83,5 +93,6 @@ export default new Router({
       path: '/search',
       component: Search
     },
-  ]
+  ],
+  mode: 'history' // 去掉路径中的#
 })

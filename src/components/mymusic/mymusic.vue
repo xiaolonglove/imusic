@@ -55,7 +55,7 @@
       </div>
     </i-scroll>
     <i-loading v-show="isLoading"></i-loading>
-    <router-view  @sendRequest="sendRequest" :selectTabtype="tabtype"></router-view>
+    <router-view  @sendRequest="sendRequest" :selectTabtype="tabtype" :disc="currentDisc"></router-view>
   </div>
 </template>
 
@@ -73,6 +73,7 @@
       return {
         data: [],
         isLoading: true,
+        currentDisc: null,
         favoriteList: [],
         discList: [],
         tabtype: 0
@@ -82,8 +83,11 @@
       this._getDiscList()
     },
     methods: {
-      selectDisclist() {
-        console.log("选择了歌单")
+      selectDisclist(item) {
+        this.$router.push({
+          path: `/disc/${item.dissid}`
+        })
+        this.currentDisc = item
       },
       selectTab(i) {
         this.tabtype = i

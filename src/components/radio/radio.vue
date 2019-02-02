@@ -1,6 +1,6 @@
 <template>
   <transition name="slide">
-    <div class="radio" v-show="showFlag" ref="radio">
+    <div class="radio" ref="radio">
       <div class="back-wrapper">
         <i-back :title="'电台'" @hide="hide"></i-back>
       </div>
@@ -96,15 +96,8 @@
       }
     },
     methods: {
-      show() {
-        this.showFlag = true
-      },
       hide() {
-        this.showFlag = false
-        setTimeout(() => {
-          // this.$router.go(-1)
-          this.$router.push('./recommend')
-        }, 300)
+        this.$router.push('./recommend')
       },
       selectTab(type) {
         if(this.tabType === type) return false

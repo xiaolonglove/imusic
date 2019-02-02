@@ -1,6 +1,6 @@
 <template>
   <transition name="slide">
-    <div class="disc" v-show="showFlag">
+    <div class="disc">
       <div class="back-wrapper">
         <i-back :title="'歌单'" @hide="hide"></i-back>
       </div>
@@ -20,17 +20,18 @@
           :data="discList"
           class="ulbox"
         >
-          <disc-list  @selectDisclist="selectDisclist" :list="discList" />
+          <disc-list @selectDisclist="selectDisclist" :list="discList" />
           <disc-categories @selectCategories="selectCategories" :tagList="tagList" :showCategory="showCategory"/>
         </i-scroll>
       </div>
-      <router-view :disc="disc"></router-view>
+      <router-view :disc="currentDisc"></router-view>
     </div>
   </transition>
 </template>
 
 <script type="text/ecmascript-6">
   import {getDiscList, getDiscTag} from '@/api/disc'
+  import {ERR_OK} from '@/api/config'
   import iBack from '@/base/back/back'
   import iScroll from '@/base/scroll/scroll'
   import discList from '@/base/disclist/disclist'
@@ -45,13 +46,24 @@
     sortId: 1,
     ein: 29
   }
-  const ERR_OK = 0
+
   export default {
     name: 'disc',
+    props: {
+      disc: {
+        type: Object,
+        default() {
+          return {
+            dissname: '',
+            imgurl: ''
+          }
+        }
+      }
+    },
     data() {
       return {
-        disc: null,
-        showFlag: true,
+        currentDisc: this.disc,
+        showFlag: false,
         isLoading: true,
         showCategory: false,
         categoryId: 0,
@@ -68,15 +80,8 @@
       this._getDiscList(this.defaultParams)
     },
     methods: {
-      show() {
-        this.showFlag = true
-      },
       hide() {
-        this.showFlag = false
-        setTimeout(() => {
-          // this.$router.go(-1)
-          this.$router.push('./recommend')
-        }, 300)
+        this.$router.push('./recommend')
       },
       selectCategories(item) {
         const sortId = item.allsorts[0].sortId
@@ -95,7 +100,7 @@
         this.$router.push({
           path: `/disc/${item.dissid}`
         })
-        this.disc = item
+        this.currentDisc = item
       },
       sendRequest(state) {
         this.$emit('sendRequest', state || 0)

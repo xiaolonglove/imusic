@@ -1,6 +1,6 @@
 <template>
   <transition name="slide">
-    <div class="top" v-show="showFlag">
+    <div class="top">
       <div class="back-wrapper">
         <i-back :title="'排行榜'" @hide="hide"></i-back>
       </div>
@@ -56,15 +56,8 @@
       this._getTopList()
     },
     methods: {
-      show() {
-        this.showFlag = true
-      },
       hide() {
-        this.showFlag = false
-        setTimeout(() => {
-          // this.$router.go(-1)
-          this.$router.push('./recommend')
-        }, 300);
+        this.$router.push('./recommend')
       },
       sendRequest(state) {
         this.$emit('sendRequest', state || 0)

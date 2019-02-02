@@ -1,6 +1,6 @@
 <template>
   <transition name="slide">
-    <div class="musiclist" v-show="showFlag">
+    <div class="musiclist">
       <div class="back-wrapper">
         <i class="icon-cheveron-left" @click="hide"></i>
         <ul class="list-tabs">
@@ -54,15 +54,8 @@
       this.selectTab()
     },
     methods: {
-      show() {
-        this.showFlag = true
-      },
       hide() {
-        this.showFlag = false
-        setTimeout(() => {
-          // this.$router.go(-1)
-          this.$router.push('./mymusic')
-        }, 300)
+        this.$router.push('./mymusic')
       },
       selectmusic(item) {
         console.log(item);

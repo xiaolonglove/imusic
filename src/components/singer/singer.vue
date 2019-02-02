@@ -1,6 +1,6 @@
 <template>
   <transition name="slide">
-    <div class="singer" v-show="showFlag" ref="singer">
+    <div class="singer" ref="singer">
       <div class="back-wrapper">
         <i-back :title="'歌手'" @hide="hide"></i-back>
       </div>
@@ -27,7 +27,6 @@
       return {
         singerList: [],
         singer: {},
-        showFlag: true,
         isLoading: true
       }
     },
@@ -35,15 +34,8 @@
       this._getSingerList()
     },
     methods: {
-      show() {
-        this.showFlag = true
-      },
       hide() {
-        this.showFlag = false
-        setTimeout(() => {
-          // this.$router.go(-1)
-          this.$router.push('./recommend')
-        }, 300)
+        this.$router.push('./recommend')
       },
       selectSinger(singer) {
         this.singer = singer

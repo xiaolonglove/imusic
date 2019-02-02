@@ -46,7 +46,7 @@
           <i-scroll ref="broadContainer" class="container" :data="radio.data" :scroll-x="radio.scrollX" :scroll-y="radio.scrollY">
           <!-- <div class="container" ref="broadContainer"> -->
             <ul class="list-ul" ref="broadUl">
-              <li ref="broadItem" class="item" @click="selectBroadcasting(item)" v-for="(item,i) in radio.data" :key="i">
+              <li ref="broadItem" class="item" @click="selectRadio(item)" v-for="(item,i) in radio.data" :key="i">
                 <div class="icon">
                   <img v-lazy="item.radioImg">
                   <span class="listennum">{{itemlistennum(item.listenNum)}}</span>
@@ -76,7 +76,7 @@
       </div>
     </i-scroll>
     <i-loading v-show="isLoading"></i-loading>
-    <router-view @sendRequest="sendRequest" :newsongTabs="newsongTabs" :radioLists="radioLists"></router-view>
+    <router-view @sendRequest="sendRequest" :newsongTabs="newsongTabs" :radioLists="radioLists" :disc="currentDisc"></router-view>
   </div>
 </template>
 
@@ -95,6 +95,7 @@
       return {
         sliders: [], //
         discList: [],
+        currentDisc: null,
         radioLists: [],
         newsongList: [],
         newsongTabs: [],
@@ -125,14 +126,14 @@
           this.$refs.scroll.refresh()
         }
       },
-      selectDisclist() {
-        console.log("选择了歌单")
+      selectDisclist(item) {
+        this.$router.push({
+          path: `/disc/${item.dissid}`
+        })
+        this.currentDisc = item
       },
-      selectBroadcasting(item) {
-        // this.$router.push({
-        //   path: `/recommend/${item.dissid}`
-        // })
-        // this.setDisc(item)
+      selectRadio(item) {
+
       },
       itemlistennum(num) {
         num += ""
