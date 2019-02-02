@@ -7,6 +7,7 @@
 <script type="text/ecmascript-6">
   import {getDiscInfo} from '@/api/recommend'
   import {ERR_OK} from '@/api/config'
+  import {processSongsUrl} from '@/api/song'
   import {createSong} from '@/common/js/song'
   import MusicList from '@/components/musicList/musicList'
 
