@@ -171,6 +171,7 @@
       width: 100%
       height: 0
       padding-top: 60%
+      background: $color-background
       transform-origin: top
       background-size: cover
       .filter

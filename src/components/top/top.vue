@@ -13,7 +13,7 @@
           <li class="group" v-for="group in topLists" :key="group.GroupID">
             <div class="group-title">{{groupTitle(group.GroupName)}}</div>
             <ul class="group-ulbox">
-              <li class="item" v-for="(item,i) in group.List" :key="i">
+              <li @click="selectItem(item)" class="item" v-for="(item,i) in group.List" :key="i">
                 <div class="item-left">
                   <div class="title">{{item.ListName}}</div>
                     <ul class="songlist-ulbox">
@@ -34,6 +34,7 @@
           </li>
         </ul>
       </i-scroll>
+      <router-view :top="top"></router-view>
     </div>
   </transition>
 </template>
@@ -49,7 +50,8 @@
     data() {
       return {
         showFlag: true,
-        topLists: []
+        topLists: [],
+        top: null
       }
     },
     created() {
@@ -61,6 +63,10 @@
       },
       sendRequest(state) {
         this.$emit('sendRequest', state || 0)
+      },
+      selectItem(item) {
+        this.top = item
+        this.$router.push(`/top/${item.topID}`)
       },
       _getTopList() {
         this.sendRequest(1)

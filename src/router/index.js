@@ -12,6 +12,7 @@ import Disc from '@/components/disc/disc'
 import DiscDetail from '@/components/discDetail/discDetail'
 import Radio from '@/components/radio/radio'
 import Top from '@/components/top/top'
+import TopDetail from '@/components/topDetail/topDetail'
 import NewSong from '@/components/newSong/newSong'
 
 Vue.use(Router)
@@ -73,7 +74,13 @@ export default new Router({
         },
         {
           path: '/top',
-          component: Top
+          component: Top,
+          children: [
+            {
+              path: ':id',
+              component: TopDetail
+            }
+          ]
         },
         {
           path: '/newsong',
